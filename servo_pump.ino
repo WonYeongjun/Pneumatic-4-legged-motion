@@ -5,7 +5,7 @@ bool pwmRunning = true;
 Servo sv1;
 int s1 = A2;
 int s2 = 2;
-int s3 = 3;
+// int s3 = 3;
 //int pos = 0;
 //int angle = 180;
 
