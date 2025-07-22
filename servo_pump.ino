@@ -6,7 +6,7 @@ Servo sv1;
 int s1 = A2;
 int s2 = 2;
 // int s3 = 3;
-//int pos = 0;
+int pos = 0;
 //int angle = 180;
 
 int joy = 2; //조이스틱
