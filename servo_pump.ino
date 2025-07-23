@@ -151,7 +151,7 @@ double angle(){
 float length(){
   long dx = newx - x;
   long dy = newy - y;
-
+  
   long leng = sqrt(pow(dx,2)+pow(dy,2));
   float length= leng/(512*sqrt(2));
   length*=255;
