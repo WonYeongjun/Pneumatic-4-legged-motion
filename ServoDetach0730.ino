@@ -39,7 +39,7 @@ void setup() {
 
 void loop() {
   char input = Serial.read();
-  Serial.println(current_servo);
+  // Serial.println(current_servo);
 
   if (input=='1' && c1==0) {
     Serial.println("1 on");
@@ -84,7 +84,8 @@ void loop() {
   
     Serial.print("팽창\n");
     for(int i=0; i<=10; i++) {
-      current_servo=sv1.read();
+      current_servo=sv2.read();
+      Serial.println(current_servo);
       sv1.write(current_servo + 13);
       sv2.write(current_servo + 13);
       sv3.write(current_servo + 13);
@@ -92,6 +93,8 @@ void loop() {
       // Serial.println(current_servo);
       delay(150);
     }
+    delay(1500);
+    Serial.println(current_servo);
     sv1.detach();
     sv2.detach();
     sv3.detach();
