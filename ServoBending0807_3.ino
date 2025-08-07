@@ -19,7 +19,7 @@
 
       void Extension() {
         if (angle != 130) {
-          angle +=10;
+          angle +=13;
           write(angle);
         }
 
@@ -31,7 +31,7 @@
 
       void Contraction() {
         if (angle != 0) {
-          angle -=10;
+          angle -=13;
           write(angle);
         }
         else {
@@ -82,6 +82,7 @@
 
   void loop() {
     char input = Serial.read();
+    // input.trim();
     // Serial.println(current_servo);
     if(input  == '123'){
       Serial.println("123 on");
@@ -138,14 +139,14 @@
       c3 = 0;
     }
 
-    if (input=='a' && tmp == 0) {
+    if (input=='a') {
       tmp = 1;
       sv1.attach(s1);
       sv2.attach(s2);
       sv3.attach(s3);
       
       Serial.print("팽창\n");
-      for(int i=0; i<=13; i++) {
+      for(int i=0; i<=10; i++) {
         sv1.Extension();
         sv2.Extension();
         sv3.Extension();
@@ -153,18 +154,19 @@
         // Serial.println(current_servo);
         delay(150);
       }
+      delay(2000);
       sv1.detach();
       sv2.detach();
       sv3.detach();
     }
 
-    if (input=='d' && tmp == 1) {
+    if (input=='d') {
       tmp = 0;
       sv1.attach(s1);
       sv2.attach(s2);
       sv3.attach(s3);
       Serial.print("수축\n");
-      for(int i=0; i<=13; i++) {
+      for(int i=0; i<=10; i++) {
         sv1.Contraction();
         sv2.Contraction();
         sv3.Contraction();
@@ -172,6 +174,7 @@
         // Serial.println(current_servo);
         delay(150);
       }
+      delay(2000);
       sv1.detach();
       sv2.detach();
       sv3.detach();
@@ -227,7 +230,7 @@
     }
 
 
-    if (input == '12' && tmp ==0) {
+    if (input == 'q') {
       tmp = 1;
       Serial.println("Bending to 12");
       sv1.attach(s1);
@@ -245,7 +248,7 @@
       sv3.detach();
     }
     
-    if (input == '23' && tmp ==0) {
+    if (input == 'w') {
       tmp = 1;
       Serial.println("Bending to 23");
       sv1.attach(s1);
@@ -263,7 +266,7 @@
       sv2.detach();
       sv3.detach();
     }
-    if (input == '31' && tmp ==0) {
+    if (input == 'e') {
       tmp = 1;
       Serial.println("Bending to 31");
       sv1.attach(s1);
