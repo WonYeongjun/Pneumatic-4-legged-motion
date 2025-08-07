@@ -54,9 +54,6 @@ int c1 = 0;
 int c2 = 0;
 int c3 = 0;
 
-MyServo sv1(s1);
-MyServo sv2(s2);
-MyServo sv3(s3);
 
 void setup() {
   MyServo sv1(s1);
