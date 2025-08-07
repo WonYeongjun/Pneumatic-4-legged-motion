@@ -3,13 +3,14 @@
 class MyServo {
   private :
     Servo sv;
-    int pin
-    int angle = sv.read()
+    int pin;
+    int angle;
 
   public :
     MyServo(int p) {
       pin = p;
       sv.attach(pin);
+      angle = sv.read();
     } 
 
     void Extension {
