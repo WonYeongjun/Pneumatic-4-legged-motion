@@ -7,8 +7,11 @@ class MyServo : public Servo  {
 
     MyServo(int p) {
       pin = p;
+      angle = 0;
       attach(pin);
-      angle = read();
+      write(0);
+      delay(2000);
+      detach(pin);
     } 
 
     void Extension() {
@@ -59,16 +62,6 @@ void setup() {
   MyServo sv1(s1);
   MyServo sv2(s2);
   MyServo sv3(s3);
-  //sv1.attach(s1);
-  //sv2.attach(s2);
-  //sv3.attach(s3);
-  sv1.write(0);
-  sv2.write(0);
-  sv3.write(0);
-  delay(2000);
-  sv1.detach();
-  sv2.detach();
-  sv3.detach();
 
   Serial.begin(9600);
 
