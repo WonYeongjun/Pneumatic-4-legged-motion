@@ -141,42 +141,69 @@
 
     if (input=='a') {
       tmp = 1;
-      sv1.attach(s1);
-      sv2.attach(s2);
-      sv3.attach(s3);
-      
+      sv1.attach(s1);      
       Serial.print("팽창\n");
       for(int i=0; i<=10; i++) {
         sv1.Extension();
+        // Serial.println(i);
+        // Serial.println(current_servo);
+        delay(50);
+      }
+      delay(150);
+      sv1.detach();
+
+      sv2.attach(s2);
+      for(int i=0; i<=10; i++) {
         sv2.Extension();
+        // Serial.println(i);
+        // Serial.println(current_servo);
+        delay(50);
+      }
+      delay(150);
+      sv2.detach();
+
+      sv3.attach(s3);
+      for(int i=0; i<=10; i++) {
         sv3.Extension();
         // Serial.println(i);
         // Serial.println(current_servo);
-        delay(150);
+        delay(50);
       }
-      delay(2000);
-      sv1.detach();
-      sv2.detach();
+      delay(150);
       sv3.detach();
     }
 
     if (input=='d') {
       tmp = 0;
       sv1.attach(s1);
-      sv2.attach(s2);
-      sv3.attach(s3);
       Serial.print("수축\n");
       for(int i=0; i<=10; i++) {
         sv1.Contraction();
+        // Serial.println(i);
+        // Serial.println(current_servo);
+        delay(50);
+      }
+      delay(150);
+      sv1.detach();
+
+      sv2.attach(s2);
+      for(int i=0; i<=10; i++) {
         sv2.Contraction();
+        // Serial.println(i);
+        // Serial.println(current_servo);
+        delay(50);
+      }
+      delay(150);
+      sv2.detach();
+
+      sv3.attach(s3);
+      for(int i=0; i<=10; i++) {
         sv3.Contraction();
         // Serial.println(i);
         // Serial.println(current_servo);
-        delay(150);
+        delay(50);
       }
-      delay(2000);
-      sv1.detach();
-      sv2.detach();
+      delay(150);
       sv3.detach();
     }
 
@@ -234,17 +261,27 @@
       tmp = 1;
       Serial.println("Bending to 12");
       sv1.attach(s1);
-      sv2.attach(s2);
-      sv3.attach(s3);
-
       for(int i=0; i<=13; i++) {
         sv1.Contraction();
-        sv2.Contraction();
-        sv3.Extension();
-        delay(150);
+        delay(50);
       }
+      delay(150);
       sv1.detach();
+
+      sv2.attach(s2);
+      for(int i=0; i<=13; i++) {
+        sv2.Contraction();
+        delay(50);
+      }
+      delay(150);
       sv2.detach();
+
+      sv3.attach(s3);
+      for(int i=0; i<=13; i++) {
+        sv3.Extension();
+        delay(50);
+      }
+      delay(150);
       sv3.detach();
     }
     
@@ -252,37 +289,54 @@
       tmp = 1;
       Serial.println("Bending to 23");
       sv1.attach(s1);
-      sv2.attach(s2);
-      sv2.attach(s3);
-      
-      
       for(int i=0; i<=13; i++) {
         sv1.Extension();
-        sv2.Contraction();
-        sv3.Contraction();
-        delay(150);
+        delay(50);
       }
+      delay(150);
       sv1.detach();
+
+      sv2.attach(s2);
+      for(int i=0; i<=13; i++) {
+        sv2.Contraction();
+        delay(50);
+      }
+      delay(150);
       sv2.detach();
+
+      sv3.attach(s3);
+      for(int i=0; i<=13; i++) {
+        sv3.Contraction();
+        delay(50);
+      }
+      delay(150);
       sv3.detach();
     }
     if (input == 'e') {
       tmp = 1;
       Serial.println("Bending to 31");
       sv1.attach(s1);
-      sv2.attach(s2);
-      sv3.attach(s3);
-
-
       for(int i=0; i<=13; i++) {
         sv1.Contraction();
-        sv2.Extension();
-        sv3.Contraction();
-        delay(150);
-        delay(150);
+        delay(50);
       }
+      delay(150);
       sv1.detach();
+
+      sv2.attach(s2);
+      for(int i=0; i<=13; i++) {
+        sv2.Extension();
+        delay(50);
+      }
+      delay(150);
       sv2.detach();
+
+      sv3.attach(s3);
+      for(int i=0; i<=13; i++) {
+        sv3.Contraction();
+        delay(50);
+      }
+      delay(150);
       sv3.detach();
     }
     
