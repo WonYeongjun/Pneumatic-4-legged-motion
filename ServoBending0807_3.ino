@@ -11,7 +11,7 @@ class MyServo : public Servo  {
       attach(pin);
       write(0);
       delay(2000);
-      detach(pin);
+      detach();
     } 
 
     void Extension() {
