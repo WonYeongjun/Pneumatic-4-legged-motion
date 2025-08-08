@@ -313,40 +313,35 @@ void setup() {
 void loop() {
   String input = Serial.readStringUntil('\n');  // character 변수, 알파벳 혹은 숫자 하나만 인식
   // Serial.println(current_servo);
-  if (input == 'P') {
-    Serial.println("123 on");
-    l1.pump1.PumpOn();
-    l1.pump2.PumpOn();
-    l1.pump3.PumpOn();
-  }
+
   if (input == 'p') {
-    Serial.println("123 off");
-    l1.pump1.PumpOff();
-    l1.pump2.PumpOff();
-    l1.pump3.PumpOff();
-  }
-
-  if (input == '1') {
+    Serial.println("123 On/Off");
     l1.pump1.Switch();
-  }
-
-  if (input == '2') {
     l1.pump2.Switch();
-  }
-
-  if (input == '3') {
     l1.pump3.Switch();
   }
 
-  if (input == 'a') {
+  if (input == "1") {
+    l1.pump1.Switch();
+  }
+
+  if (input == "2") {
+    l1.pump2.Switch();
+  }
+
+  if (input == "3") {
+    l1.pump3.Switch();
+  }
+
+  if (input == "a") {
     l1.Extension();
   }
 
-  if (input == 'd') {
+  if (input == "d") {
     l1.Contraction();
   }
 
-  if (input == 'm') {
+  if (input == "m") {
     l1.Neutral();
   }
 
