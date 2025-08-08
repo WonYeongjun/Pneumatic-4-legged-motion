@@ -1,35 +1,93 @@
-  #include <Servo.h>
+#include <Servo.h>
+#include <string.h>
 
-  class MyServo : public Servo  {
-    public :
-      int pin;
-      int angle;
+class Pump {
+public:
+  int pin;  // 펌프 핀 번호
+  int tmp;  // on = 1, off =0
+  Pump(int pin_) {
+    pin = pin_;
+    tmp = 0;
+  };
 
-      MyServo(int p) {
-        pin = p;
-        angle = 0;
-      } 
-      
-      void Initialize() {
-        attach(pin);
-        write(0);
-        delay(2000);
-        detach();
-      }
+  void Initialize() {
+    analogWrite(pin, 0);  //초기상태 pump off
+    pinMode(pin, OUTPUT);
+  }
+
+  int GetTmp() {
+    return tmp;
+  }
+
+
+  void PumpOn() {  //pump on
+    if (GetTmp() == 0) {
+      tmp = 1;
+      analogWrite(pin, 255);
+      Serial.println("Pump On");
+    } else {
+      Serial.println("Already On");
+    }
+  }
+
+
+  void PumpOff() {  //pump off
+    if (GetTmp() == 1) {
+      tmp = 0;
+      analogWrite(pin, 0);
+      Serial.println("Pump Off");
+    } else {
+      Serial.println("Already Off");
+    }
+  }
+
+  void Switch() {  // on to off OR off to on
+    if (GetTmp() == 0) {
+      PumpOn();
+    } else {
+      PumpOff();
+    }
+  }
+};
+
+
+class MyServo : public Servo {
+public:
+  int pin;    // Servo 핀번호
+  int angle;  // Servo 각도
+
+  MyServo(int p) {  //Constructor
+    pin = p;
+    angle = 0;
+  }
+
+  void Initialize() {
+    attach(pin);
+    write(0);
+    delay(2000);  // delay는 setup에 들어가지 않도록 주의
+    detach();
+  }
 
   void Extension(int n) {
-    
-    for (int i = 0; i < 130/n; i++) {
+
+    for (int i = 0; i < 130 / n; i++) {
+      if (angle == 130) {
+        Serial.println("already extended");
+        break;
+      }
       angle += n;
       write(angle);
       delay(50);
     }
-
   }
 
 
   void Contraction(int n) {  //Extension 과 유사
-    for (int i = 0; i < 130/n; i++) {
+    for (int i = 0; i < 130 / n; i++) {
+      if (angle == 0) {
+        Serial.println("already contracted");
+        break;
+      }
       angle -= n;
       write(angle);
       delay(50);
@@ -56,15 +114,9 @@ public:
     sv1.Initialize();
     sv2.Initialize();
     sv3.Initialize();
-
-
-    pinMode(p1, OUTPUT);
-    pinMode(p2, OUTPUT);
-    pinMode(p3, OUTPUT); 
-
-    analogWrite(p1, 0);
-    analogWrite(p2, 0);
-    analogWrite(p3, 0);
+    pump1.Initialize();
+    pump2.Initialize();
+    pump3.Initialize();
   }
 
 
@@ -72,32 +124,42 @@ public:
     Leg_PumpOn();
     Serial.println("Bend to 12");
     sv1.attach(sv1.pin);
-    sv2.attach(sv2.pin);
-    sv3.attach(sv3.pin);
-
-    sv1.Contraction(unit_angle);  // 1번 펌프 수축
-    sv2.Contraction(unit_angle);  // 2번 펌프 수축
-    sv3.Extension(unit_angle);    // 3번 펌프 팽창
-            
+    sv1.Contraction(unit_angle);
+    delay(150);
     sv1.detach();
+
+    sv2.attach(sv2.pin);
+    sv2.Contraction(unit_angle);
+    delay(150);
     sv2.detach();
+
+    sv3.attach(sv3.pin);  // 2번 펌프 수축
+    sv3.Extension(unit_angle);
+    delay(150);
     sv3.detach();
   }
 
-  void Bending23() {  // 2, 3번 튜브 방향으로 굽어짐.
+
+
+
+  void Bending23() {
+
     Leg_PumpOn();
     Serial.println("Bend to 23");
     sv1.attach(sv1.pin);
-    sv2.attach(sv2.pin);
-    sv3.attach(sv3.pin);
-
     sv1.Extension(unit_angle);
-    sv2.Contraction(unit_angle);
-    sv3.Contraction(unit_angle);
-
-
+    delay(150);
     sv1.detach();
+
+    sv2.attach(sv2.pin);
+    sv2.Contraction(unit_angle);
+    delay(150);
     sv2.detach();
+
+
+    sv3.attach(sv3.pin);  // 2번 펌프 수축
+    sv3.Contraction(unit_angle);
+    delay(150);  // 3번 펌프 팽창
     sv3.detach();
   }
 
@@ -105,51 +167,66 @@ public:
     Leg_PumpOn();
     Serial.println("Bend to 31");
     sv1.attach(sv1.pin);
-    sv2.attach(sv2.pin);
-    sv3.attach(sv3.pin);
-
     sv1.Contraction(unit_angle);
-    sv2.Extension(unit_angle);
-    sv3.Contraction(unit_angle);
-
-
+    delay(150);
     sv1.detach();
+
+    sv2.attach(sv2.pin);
+    sv2.Extension(unit_angle);
+    delay(150);
     sv2.detach();
+
+
+    sv3.attach(sv3.pin);  // 2번 펌프 수축
+    sv3.Contraction(unit_angle);
+    delay(150);  // 3번 펌프 팽창
     sv3.detach();
   }
 
 
   void Extension() {  // 모든 튜브 팽창
     Leg_PumpOn();
-    sv1.attach(sv1.pin);
-    sv2.attach(sv2.pin);
-    sv3.attach(sv3.pin);
 
     Serial.println("팽창");
 
+    sv1.attach(sv1.pin);
     sv1.Extension(unit_angle);
-    sv2.Extension(unit_angle);
-    sv3.Extension(unit_angle);
-
+    delay(150);
     sv1.detach();
+
+
+    sv2.attach(sv2.pin);
+    sv2.Extension(unit_angle);
+    delay(150);
     sv2.detach();
+
+
+    sv3.attach(sv3.pin);
+    sv3.Extension(unit_angle);
+    delay(150);
     sv3.detach();
   }
 
   void Contraction() {
     Leg_PumpOn();
     sv1.attach(sv1.pin);
-    sv2.attach(sv2.pin);
-    sv3.attach(sv3.pin);
+
     Serial.print("수축\n");
 
     sv1.Contraction(unit_angle);
+    delay(150);
+    sv1.detach();
+
+    sv2.attach(sv2.pin);
+
     sv2.Contraction(unit_angle);
+    delay(150);
+    sv2.detach();
+    sv3.attach(sv3.pin);
     sv3.Contraction(unit_angle);
     delay(150);
 
-    sv1.detach();
-    sv2.detach();
+
     sv3.detach();
   }
 
@@ -160,40 +237,40 @@ public:
     sv3.attach(sv3.pin);
     Serial.print("중립");
 
-      sv1.write(60);
-      sv2.write(60);
-      sv3.write(60);
-      delay(700);
-      sv1.detach();
-      sv2.detach();
-      sv3.detach();
-    }
+    sv1.write(60);
+    sv2.write(60);
+    sv3.write(60);
+    delay(700);
+    sv1.detach();
+    sv2.detach();
+    sv3.detach();
+  }
 
 
 
   void Forward() {  //예시
-
-    Bending12();
-    Neutral();
-    delay(500);
-    Bending23();
-    Neutral();
-    delay(500);
-    Bending31();
-    Neutral();
-    delay(500);
+    while (true) {
+      Bending12();
+      //Neutral();
+      delay(1500);
+      Bending23();
+      // Neutral();
+      delay(1500);
+      Bending31();
+      // Neutral();
+      delay(1500);
+    }
   }
   void Backward() {  //예시
 
     Bending31();
-    Neutral();
-    delay(500);
-    Bending23();
-    Neutral();
-    delay(500);
+    // Neutral();
+    delay(1500);
+    // Neutral();
+    delay(1500);
     Bending12();
-    Neutral();
-    delay(500);
+    // Neutral();
+    delay(1500);
   }
 };
 
@@ -264,6 +341,7 @@ void setup() {
 void loop() {
   String input = Serial.readStringUntil('\n');  // character 변수, 알파벳 혹은 숫자 하나만 인식
   // Serial.println(current_servo);
+  input.trim();
 
   if (input == "p") {
     Serial.println("123 On/Off");
@@ -310,5 +388,8 @@ void loop() {
 
   if (input == "Forward") {
     l1.Forward();
+  }
+  if (input == "Backward") {
+    l1.Backward();
   }
 }
