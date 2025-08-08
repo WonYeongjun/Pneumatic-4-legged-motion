@@ -25,10 +25,9 @@ public:
       tmp = 1;
       analogWrite(pin, 255);
       Serial.println("Pump On");
-    } 
-    // else {
-    //   Serial.println("Already On");
-    // }
+    } else {
+      Serial.println("Already On");
+    }
   }
 
 
@@ -37,10 +36,9 @@ public:
       tmp = 0;
       analogWrite(pin, 0);
       Serial.println("Pump Off");
-    } 
-    // else {
-    //   Serial.println("Already Off");
-    // }
+    } else {
+      Serial.println("Already Off");
+    }
   }
 
   void Switch() {  // on to off OR off to on
@@ -71,25 +69,23 @@ public:
   }
 
   void Extension(int n) {
-    if (angle != 130) {
+    
+    for (int i = 0, i < 130/unit_angle, i++) {
       angle += n;
-      write(angle);  // 밸브 작동 순차적으로 할 시 여기에 딜레이 넣으면 될 듯?
+      wrtie(angle);
+      delay(50);
     }
 
-    else {
-      Serial.println("Full Extended");
-    }
   }
 
 
   void Contraction(int n) {  //Extension 과 유사
-    if (angle != 0) {
+    for (int i = 0, i < 130/unit_angle, i++) {
       angle -= n;
-      write(angle);
-    } else {
-      Serial.println("Full Contracted");
+      wrtie(angle);
+      delay(50);
     }
-  }
+  
 };
 
 class Leg {  //Servo 3개 Pump 3개로 이루어진 leg class
@@ -123,12 +119,11 @@ public:
     sv1.attach(sv1.pin);
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
-    for (int i = 0; i <= 130/unit_angle; i++) {
-      sv1.Contraction(unit_angle);  // 1번 펌프 수축
-      sv2.Contraction(unit_angle);  // 2번 펌프 수축
-      sv3.Extension(unit_angle);    // 3번 펌프 팽창
-      delay(150);         // 서보가 위에서 입력한 각도까지 움직이는 시간, 현재는 3개의 서보가 동시에 움직이는 코드
-    }
+
+    sv1.Contraction(unit_angle);  // 1번 펌프 수축
+    sv2.Contraction(unit_angle);  // 2번 펌프 수축
+    sv3.Extension(unit_angle);    // 3번 펌프 팽창
+            
     sv1.detach();
     sv2.detach();
     sv3.detach();
@@ -140,12 +135,12 @@ public:
     sv1.attach(sv1.pin);
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
-    for (int i = 0; i <= 130/unit_angle; i++) {
-      sv1.Extension(unit_angle);
-      sv2.Contraction(unit_angle);
-      sv3.Contraction(unit_angle);
-      delay(150);
-    }
+
+    sv1.Extension(unit_angle);
+    sv2.Contraction(unit_angle);
+    sv3.Contraction(unit_angle);
+
+
     sv1.detach();
     sv2.detach();
     sv3.detach();
@@ -157,12 +152,12 @@ public:
     sv1.attach(sv1.pin);
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
-    for (int i = 0; i <= 130/unit_angle; i++) {
-      sv1.Contraction(unit_angle);
-      sv2.Extension(unit_angle);
-      sv3.Contraction(unit_angle);
-      delay(150);
-    }
+
+    sv1.Contraction(unit_angle);
+    sv2.Extension(unit_angle);
+    sv3.Contraction(unit_angle);
+
+
     sv1.detach();
     sv2.detach();
     sv3.detach();
@@ -176,14 +171,11 @@ public:
     sv3.attach(sv3.pin);
 
     Serial.println("팽창");
-    for (int i = 0; i <= 130/unit_angle; i++) {
-      sv1.Extension(unit_angle);
-      sv2.Extension(unit_angle);
-      sv3.Extension(unit_angle);
-      // Serial.println(i);
-      // Serial.println(current_servo);
-      delay(150);
-    }
+
+    sv1.Extension(unit_angle);
+    sv2.Extension(unit_angle);
+    sv3.Extension(unit_angle);
+
     sv1.detach();
     sv2.detach();
     sv3.detach();
@@ -195,12 +187,12 @@ public:
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
     Serial.print("수축\n");
-    for (int i = 0; i <= 130/unit_angle; i++) {
-      sv1.Contraction(unit_angle);
-      sv2.Contraction(unit_angle);
-      sv3.Contraction(unit_angle);
-      delay(150);
-    }
+
+    sv1.Contraction(unit_angle);
+    sv2.Contraction(unit_angle);
+    sv3.Contraction(unit_angle);
+    delay(150);
+
     sv1.detach();
     sv2.detach();
     sv3.detach();
@@ -312,14 +304,12 @@ Leg l1(s1, s2, s3, p1, p2, p3);
 void setup() {
   Serial.begin(9600);
   l1.Initialize();
-  Serial.println("setup");
 }
 
 void loop() {
   String input = Serial.readStringUntil('\n');  // character 변수, 알파벳 혹은 숫자 하나만 인식
   // Serial.println(current_servo);
-  Serial.println(input);
-  input.trim();
+
   if (input == "p") {
     Serial.println("123 On/Off");
     l1.pump1.Switch();
@@ -366,5 +356,4 @@ void loop() {
   if (input == "Forward") {
     l1.Forward();
   }
-
 }
