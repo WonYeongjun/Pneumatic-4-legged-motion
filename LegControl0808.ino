@@ -70,9 +70,9 @@ public:
 
   void Extension(int n) {
     
-    for (int i = 0, i < 130/unit_angle, i++) {
+    for (int i = 0; i < 130/n; i++) {
       angle += n;
-      wrtie(angle);
+      write(angle);
       delay(50);
     }
 
@@ -80,12 +80,12 @@ public:
 
 
   void Contraction(int n) {  //Extension 과 유사
-    for (int i = 0, i < 130/unit_angle, i++) {
+    for (int i = 0; i < 130/n; i++) {
       angle -= n;
-      wrtie(angle);
+      write(angle);
       delay(50);
     }
-  
+  }
 };
 
 class Leg {  //Servo 3개 Pump 3개로 이루어진 leg class
