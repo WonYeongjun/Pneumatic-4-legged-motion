@@ -316,7 +316,7 @@ void loop() {
   String input = Serial.readStringUntil('\n');  // character 변수, 알파벳 혹은 숫자 하나만 인식
   // Serial.println(current_servo);
 
-  if (input == 'p') {
+  if (input == "p") {
     Serial.println("123 On/Off");
     l1.pump1.Switch();
     l1.pump2.Switch();
