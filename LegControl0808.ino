@@ -68,9 +68,9 @@ public:
     detach();
   }
 
-  void Extension() {
+  void Extension(int n) {
     if (angle != 130) {
-      angle += 10;
+      angle += n;
       write(angle);  // 밸브 작동 순차적으로 할 시 여기에 딜레이 넣으면 될 듯?
     }
 
@@ -80,9 +80,9 @@ public:
   }
 
 
-  void Contraction() {  //Extension 과 유사
+  void Contraction(int n) {  //Extension 과 유사
     if (angle != 0) {
-      angle -= 10;
+      angle -= n;
       write(angle);
     } else {
       Serial.println("Full Contracted");
@@ -94,6 +94,7 @@ class Leg {  //Servo 3개 Pump 3개로 이루어진 leg class
 public:
   MyServo sv1, sv2, sv3;
   Pump pump1, pump2, pump3;
+  int unit_angle = 10;
   Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3)
     : sv1(s_pin1), sv2(s_pin2), sv3(s_pin3), pump1(p_pin1), pump2(p_pin2), pump3(p_pin3) {
   }
@@ -120,10 +121,10 @@ public:
     sv1.attach(sv1.pin);
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
-    for (int i = 0; i <= 13; i++) {
-      sv1.Contraction();  // 1번 펌프 수축
-      sv2.Contraction();  // 2번 펌프 수축
-      sv3.Extension();    // 3번 펌프 팽창
+    for (int i = 0; i <= 130/unit_angle; i++) {
+      sv1.Contraction(unit_angle);  // 1번 펌프 수축
+      sv2.Contraction(unit_angle);  // 2번 펌프 수축
+      sv3.Extension(unit_angle);    // 3번 펌프 팽창
       delay(150);         // 서보가 위에서 입력한 각도까지 움직이는 시간, 현재는 3개의 서보가 동시에 움직이는 코드
     }
     sv1.detach();
@@ -137,10 +138,10 @@ public:
     sv1.attach(sv1.pin);
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
-    for (int i = 0; i <= 13; i++) {
-      sv1.Extension();
-      sv2.Contraction();
-      sv3.Contraction();
+    for (int i = 0; i <= 130/unit_angle; i++) {
+      sv1.Extension(unit_angle);
+      sv2.Contraction(unit_angle);
+      sv3.Contraction(unit_angle);
       delay(150);
     }
     sv1.detach();
@@ -154,10 +155,10 @@ public:
     sv1.attach(sv1.pin);
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
-    for (int i = 0; i <= 13; i++) {
-      sv1.Contraction();
-      sv2.Extension();
-      sv3.Contraction();
+    for (int i = 0; i <= 130/unit_angle; i++) {
+      sv1.Contraction(unit_angle);
+      sv2.Extension(unit_angle);
+      sv3.Contraction(unit_angle);
       delay(150);
     }
     sv1.detach();
@@ -173,10 +174,10 @@ public:
     sv3.attach(sv3.pin);
 
     Serial.println("팽창");
-    for (int i = 0; i <= 13; i++) {
-      sv1.Extension();
-      sv2.Extension();
-      sv3.Extension();
+    for (int i = 0; i <= 130/unit_angle; i++) {
+      sv1.Extension(unit_angle);
+      sv2.Extension(unit_angle);
+      sv3.Extension(unit_angle);
       // Serial.println(i);
       // Serial.println(current_servo);
       delay(150);
@@ -192,10 +193,10 @@ public:
     sv2.attach(sv2.pin);
     sv3.attach(sv3.pin);
     Serial.print("수축\n");
-    for (int i = 0; i <= 13; i++) {
-      sv1.Contraction();
-      sv2.Contraction();
-      sv3.Contraction();
+    for (int i = 0; i <= 130/unit_angle; i++) {
+      sv1.Contraction(unit_angle);
+      sv2.Contraction(unit_angle);
+      sv3.Contraction(unit_angle);
       delay(150);
     }
     sv1.detach();
@@ -304,6 +305,7 @@ int p3 = 9;
 
 
 Leg l1(s1, s2, s3, p1, p2, p3);
+
 
 void setup() {
   Serial.begin(9600);
