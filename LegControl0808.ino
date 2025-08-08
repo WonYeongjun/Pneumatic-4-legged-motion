@@ -312,12 +312,14 @@ Leg l1(s1, s2, s3, p1, p2, p3);
 void setup() {
   Serial.begin(9600);
   l1.Initialize();
+  Serial.println("setup");
 }
 
 void loop() {
   String input = Serial.readStringUntil('\n');  // character 변수, 알파벳 혹은 숫자 하나만 인식
   // Serial.println(current_servo);
-
+  Serial.println(input);
+  input.trim();
   if (input == "p") {
     Serial.println("123 On/Off");
     l1.pump1.Switch();
