@@ -25,9 +25,10 @@ public:
       tmp = 1;
       analogWrite(pin, 255);
       Serial.println("Pump On");
-    } else {
-      Serial.println("Already On");
-    }
+    } 
+    // else {
+    //   Serial.println("Already On");
+    // }
   }
 
 
@@ -36,9 +37,10 @@ public:
       tmp = 0;
       analogWrite(pin, 0);
       Serial.println("Pump Off");
-    } else {
-      Serial.println("Already Off");
-    }
+    } 
+    // else {
+    //   Serial.println("Already Off");
+    // }
   }
 
   void Switch() {  // on to off OR off to on
