@@ -123,6 +123,14 @@ public:
   void Bending12() {  // 1, 2번 튜브 방향으로 굽어짐
     Leg_PumpOn();
     Serial.println("Bend to 12");
+
+
+    sv3.attach(sv3.pin);  // Extension 먼저
+    sv3.Extension(unit_angle);
+    delay(150);
+    sv3.detach();
+
+    
     sv1.attach(sv1.pin);
     sv1.Contraction(unit_angle);
     delay(150);
@@ -133,10 +141,7 @@ public:
     delay(150);
     sv2.detach();
 
-    sv3.attach(sv3.pin);  // 2번 펌프 수축
-    sv3.Extension(unit_angle);
-    delay(150);
-    sv3.detach();
+    
   }
 
 
@@ -166,15 +171,18 @@ public:
   void Bending31() {  // 2, 3번 튜브 방향으로 굽어짐.
     Leg_PumpOn();
     Serial.println("Bend to 31");
-    sv1.attach(sv1.pin);
-    sv1.Contraction(unit_angle);
-    delay(150);
-    sv1.detach();
 
     sv2.attach(sv2.pin);
     sv2.Extension(unit_angle);
     delay(150);
     sv2.detach();
+    
+    sv1.attach(sv1.pin);
+    sv1.Contraction(unit_angle);
+    delay(150);
+    sv1.detach();
+
+    
 
 
     sv3.attach(sv3.pin);  // 2번 펌프 수축
