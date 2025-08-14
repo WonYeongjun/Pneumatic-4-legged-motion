@@ -5,9 +5,11 @@ class Pump {
 public:
   int pin;  // 펌프 핀 번호
   int tmp;  // on = 1, off =0
-  Pump(int pin_) {
+  int speed;
+  Pump(int pin_,int speed_) {
     pin = pin_;
     tmp = 0;
+    speed = speed_;
   };
 
   void Initialize() {
@@ -23,7 +25,7 @@ public:
   void PumpOn() {  //pump on
     if (GetTmp() == 0) {
       tmp = 1;
-      analogWrite(pin, 255);
+      analogWrite(pin, speed);
       Serial.println("Pump On");
     } else {
       Serial.println("Already On");
@@ -100,14 +102,19 @@ public:
   MyServo sv1, sv2, sv3;
   Pump pump1, pump2, pump3;
   int unit_angle = 10;
-  Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3)
-    : sv1(s_pin1), sv2(s_pin2), sv3(s_pin3), pump1(p_pin1), pump2(p_pin2), pump3(p_pin3) {
+  Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int speed2, int speed3)
+    : sv1(s_pin1), sv2(s_pin2), sv3(s_pin3), pump1(p_pin1,speed1), pump2(p_pin2,speed2), pump3(p_pin3,speed3) {
   }
 
   void Leg_PumpOn() {
     pump1.PumpOn();
     pump2.PumpOn();
     pump3.PumpOn();
+  }
+  void Leg_PumpOff() {
+    pump1.PumpOff();
+    pump2.PumpOff();
+    pump3.PumpOff();
   }
 
   void Initialize() {
@@ -140,6 +147,7 @@ public:
     sv2.Contraction(unit_angle);
     delay(150);
     sv2.detach();
+    // Leg_PumpOn();
 
     
   }
@@ -148,8 +156,8 @@ public:
 
 
   void Bending23() {
-
     Leg_PumpOn();
+
     Serial.println("Bend to 23");
     sv1.attach(sv1.pin);
     sv1.Extension(unit_angle);
@@ -166,6 +174,7 @@ public:
     sv3.Contraction(unit_angle);
     delay(150);  // 3번 펌프 팽창
     sv3.detach();
+    // Leg_PumpOn();
   }
 
   void Bending31() {  // 2, 3번 튜브 방향으로 굽어짐.
@@ -189,11 +198,12 @@ public:
     sv3.Contraction(unit_angle);
     delay(150);  // 3번 펌프 팽창
     sv3.detach();
+    // Leg_PumpOn();
   }
 
 
   void Extension() {  // 모든 튜브 팽창
-    Leg_PumpOn();
+    Leg_PumpOff();
 
     Serial.println("팽창");
 
@@ -213,10 +223,11 @@ public:
     sv3.Extension(unit_angle);
     delay(150);
     sv3.detach();
+    Leg_PumpOn();
   }
 
   void Contraction() {
-    Leg_PumpOn();
+    Leg_PumpOff();
     sv1.attach(sv1.pin);
 
     Serial.print("수축\n");
@@ -236,6 +247,7 @@ public:
 
 
     sv3.detach();
+    Leg_PumpOn();
   }
 
   void Neutral() {  // 중립 상태
@@ -260,13 +272,13 @@ public:
     while (true) {
       Bending12();
       //Neutral();
-      delay(1500);
+      delay(100);
       Bending23();
       // Neutral();
-      delay(1500);
+      delay(100);
       Bending31();
       // Neutral();
-      delay(1500);
+      delay(100);
     }
   }
   void Backward() {  //예시
@@ -287,11 +299,11 @@ public:
   Leg FL, FR, RL, RR;  // Front Left, Front Right, Rear Left, Rear Right
   int tmp;
 
-  Robot(const int S_PIN[12], const int P_PIN[12])
-    : FL(S_PIN[0], S_PIN[1], S_PIN[2], P_PIN[0], P_PIN[1], P_PIN[2]),
-      FR(S_PIN[3], S_PIN[4], S_PIN[5], P_PIN[3], P_PIN[4], P_PIN[5]),
-      RL(S_PIN[6], S_PIN[7], S_PIN[8], P_PIN[6], P_PIN[7], P_PIN[8]),
-      RR(S_PIN[9], S_PIN[10], S_PIN[11], P_PIN[9], P_PIN[10], P_PIN[11]) {}
+  Robot(const int S_PIN[12], const int P_PIN[12], const int speedarray[12])
+    : FL(S_PIN[0], S_PIN[1], S_PIN[2], P_PIN[0], P_PIN[1], P_PIN[2], speedarray[0],speedarray[1],speedarray[2]),
+      FR(S_PIN[3], S_PIN[4], S_PIN[5], P_PIN[3], P_PIN[4], P_PIN[5],speedarray[3],speedarray[4],speedarray[5]),
+      RL(S_PIN[6], S_PIN[7], S_PIN[8], P_PIN[6], P_PIN[7], P_PIN[8],speedarray[6],speedarray[7],speedarray[8]),
+      RR(S_PIN[9], S_PIN[10], S_PIN[11], P_PIN[9], P_PIN[10], P_PIN[11],speedarray[9],speedarray[10],speedarray[11]) {}
 
   void Initialize() {
     FL.Initialize();
@@ -335,10 +347,12 @@ int s3 = A2;
 
 int p1 = 3;
 int p2 = 6;
-int p3 = 9;
+int p3 = A5;
 
-
-Leg l1(s1, s2, s3, p1, p2, p3);
+int spd1 = 254;
+int spd2 = 150;
+int spd3=254;
+Leg l1(s1, s2, s3, p1, p2, p3,spd1,spd2,spd3);
 
 
 void setup() {
