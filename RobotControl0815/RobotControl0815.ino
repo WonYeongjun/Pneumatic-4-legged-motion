@@ -1,11 +1,11 @@
 
-#include <RobotLib.h>
-#include <MakeOrder.h>
+#include "MakeOrder.h"
+#include "RobotLib.h"
 #include <string.h>
 
 
 int s1[3] = {A0, A1, A2};
-int p1[3] = {2, 4, 64};
+int p1[3] = {2, 4, 6};
 int speed_1[12] = {255, 255, 255};
 
 int s2[3] = {A3, A4, A5};
