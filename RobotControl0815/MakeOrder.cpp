@@ -8,13 +8,23 @@ String Input() {
 }
 
 // ===== Kill-switch helpers =====
+//static void KillAllPumps(Robot& robot) {
+//  robot.FL.pump1.PumpOff(); robot.FL.pump2.PumpOff(); robot.FL.pump3.PumpOff();
+//  robot.FR.pump1.PumpOff(); robot.FR.pump2.PumpOff(); robot.FR.pump3.PumpOff();
+//  robot.RL.pump1.PumpOff(); robot.RL.pump2.PumpOff(); robot.RL.pump3.PumpOff();
+//  robot.RR.pump1.PumpOff(); robot.RR.pump2.PumpOff(); robot.RR.pump3.PumpOff();
+//  Serial.println(F("[KILL] All pumps OFF"));
+//}
+
+//===== Kill-switch helpers =====
 static void KillAllPumps(Robot& robot) {
-  robot.FL.pump1.PumpOff(); robot.FL.pump2.PumpOff(); robot.FL.pump3.PumpOff();
-  robot.FR.pump1.PumpOff(); robot.FR.pump2.PumpOff(); robot.FR.pump3.PumpOff();
-  robot.RL.pump1.PumpOff(); robot.RL.pump2.PumpOff(); robot.RL.pump3.PumpOff();
-  robot.RR.pump1.PumpOff(); robot.RR.pump2.PumpOff(); robot.RR.pump3.PumpOff();
-  Serial.println(F("[KILL] All pumps OFF"));
+ robot.A.pump1.PumpOff(); robot.A.pump2.PumpOff(); robot.A.pump3.PumpOff();
+ robot.B.pump1.PumpOff(); robot.B.pump2.PumpOff(); robot.B.pump3.PumpOff();
+ robot.C.pump1.PumpOff(); robot.C.pump2.PumpOff(); robot.C.pump3.PumpOff();
+ Serial.println(F("[KILL] All pumps OFF"));
 }
+
+
 static inline bool HandleKill(const String& s, Robot& robot) {
   if (s.length() == 1 && (s[0] == 'p' || s[0] == 'P')) {
     KillAllPumps(robot);
@@ -29,34 +39,6 @@ static void DoPumpAction(Pump& P, int pa, Robot& robot) {
     case 1: P.PumpOn();  break;
     case 2: P.PumpOff(); break;
     case 3: P.Switch();  break;
-
-    case 4: {
-      Serial.println(F("Enter an integer between 0 and 255 for the pump intensity."));
-      while (true) {
-        String ds = Input();
-        if (HandleKill(ds, robot)) continue;     // ★ 여기서도 p 처리
-        if (ds.length() == 0) { delay(1); continue; }
-
-        // 숫자만 허용
-        bool numeric = true;
-        for (size_t i = 0; i < ds.length(); ++i) {
-          if (!isDigit(ds[i])) { numeric = false; break; }
-        }
-        if (!numeric) { Serial.println(F("Invalid")); continue; }
-
-        int pd = ds.toInt();
-        if (pd < 0 || pd > 255) {
-          Serial.print(pd); Serial.println(F(" is out of range (0-255)."));
-          continue;
-        }
-
-        P.Intensity(pd);
-        Serial.print(F("Pump intensity is changed to "));
-        Serial.println(pd);
-        return;  // 한 액션 완료 → 상위로 복귀
-      }
-    } break;
-
     default:
       Serial.println(F("Invalid"));
       break;
@@ -86,7 +68,7 @@ void MakeOrder(Robot& robot) {
         bool showRM = true;
         while (true) {
           if (showRM) {
-            Serial.println(F("Robot Movement : 1.Forward  2.Backward  3.TurnLeft  4.TurnRight  /  0.Back"));
+            Serial.println(F("Robot Movement : 1.AB_Forward  2.Backward  3.TurnLeft  4.TurnRight 5.Standing /  0.Back"));
             showRM = false;
           }
           String rs = Input();
@@ -95,10 +77,11 @@ void MakeOrder(Robot& robot) {
           if (rs == "0") break;
           int sel = rs.toInt();
           switch (sel) {
-            case 1: robot.Forward();   break;
+            case 1: robot.AB_Forward();   break;
             case 2: robot.Backward();  break;
             case 3: robot.TurnLeft();  break;
             case 4: robot.TurnRight(); break;
+            case 5: robot.Standing(); break;
             default: Serial.println(F("Invalid")); break;
           }
           showRM = true;
@@ -110,7 +93,7 @@ void MakeOrder(Robot& robot) {
         bool showLegSel = true;
         while (true) {
           if (showLegSel) {
-            Serial.println(F("Select Leg : 1.FL  2.FR  3.RL  4.RR  /  0.Back"));
+            Serial.println(F("Select Leg : 1.A 2.B 3.C  /  0.Back"));
             showLegSel = false;
           }
           String ls = Input();
@@ -120,10 +103,10 @@ void MakeOrder(Robot& robot) {
 
           int legSel = ls.toInt();
           Leg* L = nullptr;
-          if      (legSel == 1) L = &robot.FL;
-          else if (legSel == 2) L = &robot.FR;
-          else if (legSel == 3) L = &robot.RL;
-          else if (legSel == 4) L = &robot.RR;
+          if      (legSel == 1) L = &robot.A;
+          else if (legSel == 2) L = &robot.B;
+          else if (legSel == 3) L = &robot.C;
+//          else if (legSel == 4) L = &robot.RR;
           else { Serial.println(F("Invalid")); showLegSel = true; continue; }
 
           bool showLegMenu = true;
@@ -144,7 +127,7 @@ void MakeOrder(Robot& robot) {
               bool showLM = true;
               while (true) {
                 if (showLM) {
-                  Serial.println(F("Leg Movement : 1.Forward  2.Backward  3.Bending  4.Extension  5.Contraction 6.PumpOff /  0.Back"));
+                  Serial.println(F("Leg Movement : 1.Forward  2.Backward  3.Bending  4.Extension  5.Contraction  /  0.Back"));
                   showLM = false;
                 }
                 String mms = Input();
@@ -176,7 +159,6 @@ void MakeOrder(Robot& robot) {
                 }
                 else if (mm == 4) { L->Extension(); }
                 else if (mm == 5) { L->Contraction(); }
-                else if (mm == 6) {L->Leg_PumpOff();}
                 else              { Serial.println(F("Invalid")); }
 
                 showLM = true;
@@ -201,7 +183,7 @@ void MakeOrder(Robot& robot) {
                 bool showPumpAct = true;
                 while (true) {
                   if (showPumpAct) {
-                    Serial.println(F("Pump Action : 1.TurnOn  2.TurnOff  3.Switch  4.Intensity  /  0.Back"));
+                    Serial.println(F("Pump Action : 1.TurnOn  2.TurnOff  3.Switch /  0.Back"));
                     showPumpAct = false;
                   }
                   String pas = Input();
