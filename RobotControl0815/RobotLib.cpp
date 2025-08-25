@@ -361,6 +361,38 @@ void Robot::Initialize() {
   C.Initialize();
 }
 
+void Robot::Initial_pose() {
+  A.Contraction();
+  A.Leg_PumpOff();
+  B.Contraction();
+  B.Leg_PumpOff();
+  C.Contraction();
+  C.Leg_PumpOff();
+
+  A.Leg_PumpOn();
+  B.Leg_PumpOn();
+  C.Leg_PumpOn();
+  delay(2000);
+  A.Leg_PumpOff();
+  B.Leg_PumpOff();
+  C.Leg_PumpOff();
+
+  A.Bending23();
+  A.Leg_PumpOff();
+  B.Bending23();
+  B.Leg_PumpOff();
+  C.Bending23();
+  C.Leg_PumpOff();
+
+  A.Leg_PumpOn();
+  B.Leg_PumpOn();
+  C.Leg_PumpOn();
+  delay(5000);
+  A.Leg_PumpOff();
+  B.Leg_PumpOff();
+  C.Leg_PumpOff();
+
+}
 void Robot::AB_Forward() {
   A.Contraction();
   A.Bending12();

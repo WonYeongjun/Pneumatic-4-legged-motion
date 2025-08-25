@@ -68,7 +68,7 @@ void MakeOrder(Robot& robot) {
         bool showRM = true;
         while (true) {
           if (showRM) {
-            Serial.println(F("Robot Movement : 1.AB_Forward  2.Backward  3.TurnLeft  4.TurnRight 5.Standing /  0.Back"));
+            Serial.println(F("Robot Movement : 1.AB_Forward  2.Backward  3.TurnLeft  4.TurnRight 5.Standing 6.Initial_pose /  0.Back"));
             showRM = false;
           }
           String rs = Input();
@@ -82,6 +82,7 @@ void MakeOrder(Robot& robot) {
             case 3: robot.TurnLeft();  break;
             case 4: robot.TurnRight(); break;
             case 5: robot.Standing(); break;
+            case 6: robot.Initial_pose(); break;
             default: Serial.println(F("Invalid")); break;
           }
           showRM = true;

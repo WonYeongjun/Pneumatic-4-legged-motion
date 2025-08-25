@@ -60,6 +60,7 @@ public:
 
   Robot(const int S_PIN[9], const int P_PIN[9], const int speedarray[9]);
   void Initialize();
+  void Initial_pose();
     
   void AB_Forward();
 
