@@ -143,7 +143,7 @@ void Leg::Bending12() {
 
   sv3.attach(sv3.pin);
   sv3.Extension(3);
-  delay(150);
+  delay(500);
   sv3.detach();
 
   sv1.attach(sv1.pin);
@@ -270,9 +270,9 @@ void Leg::Neutral() {
 }
 
 void Leg::Forward() {
-  Contraction();
+  // Contraction();
   Bending12();
-  delay(2000);
+  delay(1500);
 
   sv1.attach(sv1.pin);
   sv1.Extension(unit_angle);
@@ -284,10 +284,11 @@ void Leg::Forward() {
   delay(150);
   sv2.detach();
 
-  sv3.attach(sv3.pin);
-  sv3.Extension(unit_angle);
-  delay(150);
-  sv3.detach();
+  // sv3.attach(sv3.pin);
+  // sv3.Extension(unit_angle);
+  // delay(150);
+  // sv3.detach();
+  delay(1000);
   
   Leg_PumpOff();
   delay(1000);
@@ -307,7 +308,7 @@ void Leg::Forward() {
   pump2.PumpOn();
   pump3.PumpOn();
 
-  delay(1600);
+  delay(2000);
 
 
   pump2.PumpOff();
@@ -361,7 +362,7 @@ void Robot::Initialize() {
   C.Initialize();
 }
 
-void Robot::Initial_pose() {
+void Robot::Standing() {
   A.Contraction();
   A.Leg_PumpOff();
   B.Contraction();
@@ -394,8 +395,11 @@ void Robot::Initial_pose() {
 
 }
 void Robot::AB_Forward() {
-  A.Contraction();
   A.Bending12();
+  A.Leg_PumpOff();
+  Serial.println("bend");
+  delay(1000);
+  A.Leg_PumpOn();
   delay(2000);
 
   A.sv1.attach(A.sv1.pin);
@@ -408,11 +412,7 @@ void Robot::AB_Forward() {
   delay(150);
   A.sv2.detach();
 
-  A.sv3.attach(A.sv3.pin);
-  A.sv3.Extension(A.unit_angle);
-  delay(150);
-  A.sv3.detach();
-  
+  delay(1000);
   A.Leg_PumpOff();
   delay(1000);
 
@@ -430,7 +430,7 @@ void Robot::AB_Forward() {
   A.pump2.PumpOn();
   A.pump3.PumpOn();
 
-  delay(1600);
+  delay(5000);
 
 
   A.pump2.PumpOff();
@@ -454,53 +454,7 @@ void Robot::AB_Forward() {
   B.Extension();
 
   A.Leg_PumpOn();
-  // A.Bending12();
-  // B.Bending31();
-  // delay(200);
-  // A.Bending23();
-  // B.Bending23();
-  // delay(200);
-  // A.Bending31();
-  // B.Bending12();
-  // delay(200);
-  // A.Contraction();
-  // delay(150);
 
-
-    // A.Forward();
-    // B.Backward();
-    // A.Contraction();
-    // B.Contraction();
-    // delay(150);
-    
-    
-    // A.Forward();
-    // B.Backward();
-    // A.Contraction();
-    // B.Contraction();
-    
-
-    
-//    A.Bending31();
-//    delay(1500);
-//    B.Bending12();
-//    delay(1500);
-//    C.Bending31();
-//    delay(1500);
-//    
-//    A.Bending23();
-//    delay(1500);
-//    B.Bending23();
-//    delay(1500);
-//    C.Bending12();
-//    delay(1500);
-//    
-//    A.Bending12();
-//    delay(1500);
-//    B.Bending31();
-//    delay(1500);
-//    C.Bending31();
-//    delay(1500);
 }
 
 //void Robot::FR_RL_Forward() {
@@ -513,9 +467,4 @@ void Robot::Backward() { /* TODO */     }
 void Robot::TurnRight(){ /* TODO */ }
 void Robot::TurnLeft() { /* TODO */ }
 
-void Robot::Standing() {
-    A.Bending23();
-    B.Bending23();
-    C.Bending23();
-}
 
