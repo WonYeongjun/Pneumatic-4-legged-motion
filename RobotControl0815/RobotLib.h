@@ -37,7 +37,10 @@ public:
 
   Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int spped2, int speed3);
   void Leg_PumpOn();
+  void Leg_PumpOff();
   void Initialize();
+  void Leg_simultaneous_contraction();
+  void Leg_simultaneous_extention();
 
   void Bending12();
   void Bending23();

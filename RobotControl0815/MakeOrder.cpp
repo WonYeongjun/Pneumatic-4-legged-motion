@@ -127,7 +127,7 @@ void MakeOrder(Robot& robot) {
               bool showLM = true;
               while (true) {
                 if (showLM) {
-                  Serial.println(F("Leg Movement : 1.Forward  2.Backward  3.Bending  4.Extension  5.Contraction  /  0.Back"));
+                  Serial.println(F("Leg Movement : 1.Forward  2.Backward  3.Bending  4.Extension  5.Contraction 6.kill_pump /  0.Back"));
                   showLM = false;
                 }
                 String mms = Input();
@@ -159,6 +159,7 @@ void MakeOrder(Robot& robot) {
                 }
                 else if (mm == 4) { L->Extension(); }
                 else if (mm == 5) { L->Contraction(); }
+                else if (mm == 6) {L->Leg_PumpOff();}
                 else              { Serial.println(F("Invalid")); }
 
                 showLM = true;
@@ -213,7 +214,7 @@ void MakeOrder(Robot& robot) {
               bool showServoSel = true;
               while (true) {
                 if (showServoSel) {
-                  Serial.println(F("Servo : 1.Servo1  2.Servo2  3.Servo3  /  0.Back"));
+                  Serial.println(F("Servo : 1.Servo1  2.Servo2  3.Servo3 4.Leg_simultaneous_extention 5.Leg_simultaneous_contraction /  0.Back"));
                   showServoSel = false;
                 }
                 String sss = Input();
@@ -226,6 +227,10 @@ void MakeOrder(Robot& robot) {
                 if      (ss == 1) S = &L->sv1;
                 else if (ss == 2) S = &L->sv2;
                 else if (ss == 3) S = &L->sv3;
+                else if (ss == 4) {L->Leg_simultaneous_extention();
+                continue;}
+                else if (ss == 5) {L->Leg_simultaneous_contraction();
+                continue;}
                 else { Serial.println(F("Invalid")); showServoSel = true; continue; }
 
                 bool showServoAct = true;
