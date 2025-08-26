@@ -52,6 +52,7 @@ public:
 
   void Forward();
   void Backward();
+  void Standing();
 };
 
 class Robot {

@@ -227,10 +227,10 @@ void MakeOrder(Robot& robot) {
                 if      (ss == 1) S = &L->sv1;
                 else if (ss == 2) S = &L->sv2;
                 else if (ss == 3) S = &L->sv3;
-                else if (ss == 4) {L->Leg_simultaneous_extention();
-                continue;}
-                else if (ss == 5) {L->Leg_simultaneous_contraction();
-                continue;}
+                // else if (ss == 4) {L->Leg_simultaneous_extention();
+                // continue;}
+                // else if (ss == 5) {L->Leg_simultaneous_contraction();
+                // continue;}
                 else { Serial.println(F("Invalid")); showServoSel = true; continue; }
 
                 bool showServoAct = true;
