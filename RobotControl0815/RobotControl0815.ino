@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-int s1[3] = {24, 25, 22};
+int s1[3] = {24, 25, 26};
 int p1[3] = {A0, A2, A4};
 int speed_1[3] = {255, 255, 255};
 

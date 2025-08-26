@@ -142,8 +142,8 @@ void Leg::Bending12() {
   Serial.println(F("Bend to 12"));
 
   sv3.attach(sv3.pin);
-  sv3.Extension(3);
-  delay(500);
+  sv3.Extension(unit_angle);
+  delay(150);
   sv3.detach();
 
   sv1.attach(sv1.pin);
@@ -288,7 +288,7 @@ void Leg::Forward() {
   // sv3.Extension(unit_angle);
   // delay(150);
   // sv3.detach();
-  delay(1000);
+  delay(500);
   
   Leg_PumpOff();
   delay(1000);
@@ -308,7 +308,7 @@ void Leg::Forward() {
   pump2.PumpOn();
   pump3.PumpOn();
 
-  delay(2000);
+  delay(5000);
 
 
   pump2.PumpOff();
