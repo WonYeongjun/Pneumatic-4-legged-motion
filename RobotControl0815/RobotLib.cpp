@@ -3,7 +3,7 @@
 #include "RobotLib.h"
 
 // -------- Joy --------
-Joy::Joy(int X_, int Y_, int joy_, int x_, int y_) : X(X_), Y(Y_), joy(joy_), newx(0), newy(0), ctrx(x_), ctry(y_) {}
+Joy::Joy(int X_, int Y_, int joy_, int ctrx_, int ctry_) : X(X_), Y(Y_), joy(joy_), newx(0), newy(0), ctrx(ctrx_), ctry(ctry_) {}
 void Joy::Initialize() {
   pinMode(X, INPUT);
   pinMode(Y, INPUT);
@@ -150,8 +150,8 @@ void MyServo::Contraction(int n) {
 }
 
 // -------- Leg --------
-Leg::Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int speed2, int speed3)
-: sv1(s_pin1), sv2(s_pin2), sv3(s_pin3), pump1(p_pin1, speed1), pump2(p_pin2, speed2), pump3(p_pin3, speed3) {}
+Leg::Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int speed2, int speed3, int X_, int Y_, int joy_, int ctrx_, int ctry_)
+: sv1(s_pin1), sv2(s_pin2), sv3(s_pin3), pump1(p_pin1, speed1), pump2(p_pin2, speed2), pump3(p_pin3, speed3), joy(X_, Y_, joy_, ctrx_, ctry_) {}
 
 void Leg::Leg_PumpOn() {
   pump1.PumpOn();

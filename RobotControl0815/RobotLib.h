@@ -57,9 +57,10 @@ class Leg {
 public:
   MyServo sv1, sv2, sv3;
   Pump pump1, pump2, pump3;
+  Joy joy;
   int unit_angle = 10;
 
-  Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int spped2, int speed3);
+  Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int speed2, int speed3, int X_=1, int Y_=2, int joy_=3, int ctrx_=519, int ctry_=494);
   void Leg_PumpOn();
   void Leg_PumpOff();
   void Initialize();
