@@ -3,6 +3,29 @@
 #pragma once
 #include <Arduino.h>
 #include <Servo.h>
+#include <math.h>
+
+class Joy {
+public:
+  int joy;
+  int X;
+  int Y;
+  int pos;
+
+  int stop_sign=0;
+  long newx;
+  long newy;
+  long *newxptr = &newx;
+  long *newyptr = &newy;
+  float state[3];
+
+  void Initialize();
+  void get_input(long* newx, long* newy);
+  double angle();
+  float length();
+  void angle_to_rel_state(float* state, double angle, float length);
+  void PWM();
+};
 
 class Pump {
 public:
@@ -57,9 +80,10 @@ public:
 
 class Robot {
 public:
-  Leg A, B, C;
+  Leg A, B, C, D;
+  int unit_angle=10;
 
-  Robot(const int S_PIN[9], const int P_PIN[9], const int speedarray[9]);
+  Robot(const int S_PIN[12], const int P_PIN[12], const int speedarray[12]);
   void Initialize();
     
   void AB_Forward();

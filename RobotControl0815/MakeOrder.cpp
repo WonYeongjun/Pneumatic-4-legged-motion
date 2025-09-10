@@ -21,6 +21,7 @@ static void KillAllPumps(Robot& robot) {
  robot.A.pump1.PumpOff(); robot.A.pump2.PumpOff(); robot.A.pump3.PumpOff();
  robot.B.pump1.PumpOff(); robot.B.pump2.PumpOff(); robot.B.pump3.PumpOff();
  robot.C.pump1.PumpOff(); robot.C.pump2.PumpOff(); robot.C.pump3.PumpOff();
+ robot.D.pump1.PumpOff(); robot.D.pump2.PumpOff(); robot.D.pump3.PumpOff();
  Serial.println(F("[KILL] All pumps OFF"));
 }
 
@@ -93,7 +94,7 @@ void MakeOrder(Robot& robot) {
         bool showLegSel = true;
         while (true) {
           if (showLegSel) {
-            Serial.println(F("Select Leg : 1.A 2.B 3.C  /  0.Back"));
+            Serial.println(F("Select Leg : 1.A 2.B 3.C 4.D  /  0.Back"));
             showLegSel = false;
           }
           String ls = Input();
@@ -106,7 +107,7 @@ void MakeOrder(Robot& robot) {
           if      (legSel == 1) L = &robot.A;
           else if (legSel == 2) L = &robot.B;
           else if (legSel == 3) L = &robot.C;
-//          else if (legSel == 4) L = &robot.RR;
+          else if (legSel == 4) L = &robot.D;
           else { Serial.println(F("Invalid")); showLegSel = true; continue; }
 
           bool showLegMenu = true;
