@@ -281,6 +281,79 @@ void Leg::Bending31() {
 
 }
 
+void Leg::Bending1() {
+    Leg_PumpOff();
+    Serial.println(F("Bend to 1"));
+    
+    sv1.attach(sv1.pin);
+    sv1.Contraction(unit_angle);
+    delay(150);
+    sv1.detach();
+
+    sv2.attach(sv2.pin);
+    sv2.Extension(unit_angle);
+    delay(150);
+    sv2.detach();
+
+    sv3.attach(sv3.pin);
+    sv3.Extension(unit_angle);
+    delay(150);
+    sv3.detach();
+
+
+    Leg_PumpOn();
+}
+
+void Leg::Bending2() {
+    Leg_PumpOff();
+    Serial.println(F("Bend to 2"));
+    
+    sv2.attach(sv2.pin);
+    sv2.Contraction(unit_angle);
+    delay(150);
+    sv2.detach();
+    
+    sv3.attach(sv3.pin);
+    sv3.Extension(unit_angle);
+    delay(150);
+    sv3.detach();
+    
+    sv1.attach(sv1.pin);
+    sv1.Extension(unit_angle);
+    delay(150);
+    sv1.detach();
+
+    
+
+
+    Leg_PumpOn();
+}
+
+void Leg::Bending3() {
+    Leg_PumpOff();
+    Serial.println(F("Bend to 3"));
+    
+    sv3.attach(sv3.pin);
+    sv3.Contraction(unit_angle);
+    delay(150);
+    sv3.detach();
+    
+    sv1.attach(sv1.pin);
+    sv1.Extension(unit_angle);
+    delay(150);
+    sv1.detach();
+
+    sv2.attach(sv2.pin);
+    sv2.Extension(unit_angle);
+    delay(150);
+    sv2.detach();
+
+
+
+
+    Leg_PumpOn();
+}
+
 void Leg::Extension() {
   // Leg_PumpOn();
   // Serial.println(F("팽창"));
