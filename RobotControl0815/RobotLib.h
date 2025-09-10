@@ -10,21 +10,22 @@ public:
   int joy;
   int X;
   int Y;
+  int ctrx;
+  int ctry;
   int pos;
 
   int stop_sign=0;
   long newx;
   long newy;
-  long *newxptr = &newx;
-  long *newyptr = &newy;
+  float angle;
+  long length;
   float state[3];
-
+  explicit Joy(int X_, int Y_, int joy_,int ctrx=519, int ctry=494);
   void Initialize();
-  void get_input(long* newx, long* newy);
-  double angle();
-  float length();
-  void angle_to_rel_state(float* state, double angle, float length);
-  void PWM();
+  void get_input();
+  void cal_angle();
+  void cal_length();
+  //void angle_to_rel_state();
 };
 
 class Pump {

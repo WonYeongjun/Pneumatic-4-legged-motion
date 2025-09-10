@@ -3,8 +3,78 @@
 #include "RobotLib.h"
 
 // -------- Joy --------
-Joy::Joy(int X_, int Y_, int joy_) : X(X_), Y(Y_), joy(joy_), newX(0), newY(0) {}
+Joy::Joy(int X_, int Y_, int joy_, int x_, int y_) : X(X_), Y(Y_), joy(joy_), newx(0), newy(0), ctrx(x_), ctry(y_) {}
+void Joy::Initialize() {
+  pinMode(X, INPUT);
+  pinMode(Y, INPUT);
+  pinMode(joy, INPUT);
+  pos = digitalRead(joy);
+}
+void Joy::get_input() {
+  newx = analogRead(X);
+  newy = analogRead(Y);
+}
 
+void Joy::cal_angle() {
+  int dx = newx - ctrx;
+  int dy = newy - ctry;
+
+  angle = atan2(dy, dx);
+  if (angle<0){
+    angle = angle + 2*M_PI;
+  }
+  angle=angle*180/M_PI;
+}
+
+void Joy::cal_length() {
+  long dx = newx - ctrx;
+  long dy = newy - ctry;
+  
+  long leng = sqrt(pow(dx,2)+pow(dy,2));
+  length= leng/(512*sqrt(2));
+  length*=255;
+}
+/*void Joy::angle_to_rel_state() {
+  float rel_angle, low, high, low_tmp, high_tmp;
+
+  if (30 <= angle && angle < 150) { // A : 1 , 2
+    rel_angle = (angle - 30) * M_PI / 180.0;
+    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
+    high_tmp = 2 * sin(rel_angle) / sqrt(3);
+    low = low_tmp / (low_tmp + high_tmp);
+    high = high_tmp / (low_tmp + high_tmp);
+    state[0] = 0;
+    state[1] = low * length *(255-minspeed)/255 + minspeed;
+    state[2] = high* length *(255-minspeed)/255 + minspeed;
+  } 
+  else if (150 <= angle && angle < 270) { // B : 2 , 0
+    rel_angle = (angle - 150) * M_PI / 180.0;
+    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
+    high_tmp = 2 * sin(rel_angle) / sqrt(3);
+    low = low_tmp / (low_tmp + high_tmp);
+    high = high_tmp / (low_tmp + high_tmp);
+    state[1] = 0;
+    state[2] = low * length *(255-minspeed)/255 + minspeed;
+    state[0] = high* length *(255-minspeed)/255 + minspeed;
+  } 
+  else { // C : 0 , 1
+    rel_angle = (angle - 270) * M_PI / 180.0;
+    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
+    high_tmp = 2 * sin(rel_angle) / sqrt(3);
+    low = low_tmp / (low_tmp + high_tmp);
+    high = high_tmp / (low_tmp + high_tmp);
+    state[2] = 0;
+    state[0] = low * length *(255-minspeed)/255 + minspeed;
+    state[1] = high* length *(255-minspeed)/255 + minspeed;
+    }
+  Serial.print("state : ");
+  Serial.print((int)state[0]);
+  Serial.print(", ");
+  Serial.print((int)state[1]);
+  Serial.print(", ");
+  Serial.println((int)state[2]);
+  Serial.println(" ");
+}*/
 // -------- Pump --------
 Pump::Pump(int pin_, int speed_) : pin(pin_), speed(speed_), tmp(0) {}
 
