@@ -579,89 +579,26 @@ void Robot::Standing() {
 }
 
 void Robot::AB_Forward() {
-  int A_temp[3] = {A.pump1.speed, A.pump2.speed, A.pump3.speed};
-  int B_temp[3] = {B.pump1.speed, B.pump2.speed, B.pump3.speed};
-
-  B.pump1.speed = 130;
-  B.pump2.speed = 130;
-  B.pump3.speed = 130;
-  B.Standing();
-
-  A.Extension();
-  delay(800);
+    Standing();
+    delay(100);
+    B.Extension();
+    delay(1000);
+    B.Leg_PumpOff();
+    
   
-  A.Bending12();
-  delay(2000);
-  B.Leg_PumpOn();
-  delay(500);
-  B.Leg_PumpOff();
-
-
-  A.Bending23();
-  delay(2000);
-  B.Leg_PumpOn();
-  delay(500);
-  B.Leg_PumpOff();
-
-
-  A.Bending31();
-  delay(2000);
-  B.Leg_PumpOn();
-  delay(500);
-  B.Leg_PumpOff();
-
-
-  A.Bending12();
-  delay(2000);
-  B.Leg_PumpOn();
-  delay(500);
-  B.Leg_PumpOff();
-
-  A.Contraction();
-
-  B.pump1.speed = B_temp[0];
-  B.pump2.speed = B_temp[1];
-  B.pump3.speed = B_temp[2];
-
-  A.pump1.speed = 130;
-  A.pump2.speed = 130;
-  A.pump3.speed = 130;
-  A.Standing();
-
-  B.Extension();
-  delay(500);
-  
-  B.Bending12();
-  delay(2000);
-  A.Leg_PumpOn();
-  delay(500);
-  A.Leg_PumpOff();
-
-  B.Bending23();
-  delay(2000);
-  A.Leg_PumpOn();
-  delay(500);
-  A.Leg_PumpOff();
-
-
-  B.Bending31();
-  delay(2000);
-  A.Leg_PumpOn();
-  delay(500);
-  A.Leg_PumpOff();
-
-
-  B.Bending12();
-  delay(2000);
-  A.Leg_PumpOn();
-  delay(500);
-  A.Leg_PumpOff();
-
-  B.Contraction();
-
-  A.pump1.speed = A_temp[0];
-  A.pump2.speed = A_temp[1];
-  A.pump3.speed = A_temp[2];
+    A.Forward();
+    
+    Standing();
+    delay(100);
+    
+    A.Extension();
+    delay(800);
+    A.Leg_PumpOff();
+    
+    
+    B.Backward();
+    Standing();
+    delay(100);
 
 }
 
@@ -670,29 +607,105 @@ void Robot::AB_Forward() {
 //}
 
 void Robot::Forward()  {
-  Standing();
-  A.Forward();
-}
-void Robot::Backward() {
-  Standing();
-  A.Extension();
-  A.Leg_PumpOff();
-  C.Contraction();
-  A.Leg_PumpOn();
+  Contraction();
+  Bending12();
+  delay(1500);
+    
+  Bending23();
   delay(1000);
-  A.Leg_PumpOff();
-  C.Leg_PumpOff();
+    
+  Leg_PumpOff();
 
-  A.Contraction();
-  A.Bending31();
+
+
+  sv2.attach(sv2.pin);
+  sv2.Extension(unit_angle);
+  delay(150);
+  sv2.detach();
+  Leg_PumpOn();
+  delay(1500);
+    
+    
+
+    
+  Bending3();
+  delay(600);
+    
+  pump1.PumpOff();
+  pump2.PumpOff();
+  pump3.PumpOff();
   delay(1000);
-  A.Leg_PumpOff();
-  A.sv1.Extension(unit_angle);
-  A.sv2.Contraction(unit_angle);
-  A.sv3.Extension(unit_angle);
-  A.Leg_PumpOn();
-  A.pump1.PumpOff();
+    
+    
+    
+  Bending1();
+  delay(200);
+
+  sv1.attach(sv1.pin);
+  sv1.Contraction(unit_angle);
+  delay(150);
+  sv1.detach();
+
+  sv2.attach(sv2.pin);
+  sv2.Contraction(unit_angle);
+  delay(150);
+  sv2.detach();
+
+  sv3.attach(sv3.pin);
+  sv3.Contraction(unit_angle);
+  delay(150);
+  sv3.detach();
+
+  Leg_PumpOn();
+
   delay(1000);
+}
+
+
+void Robot::Backward() {
+    Contraction();
+    Bending31();
+    delay(2500);
+      
+      Bending23();
+      delay(1000);
+      
+  Leg_PumpOff();
+
+    sv3.attach(sv3.pin);
+    sv3.Extension(unit_angle);
+    delay(150);
+    sv3.detach();
+    Leg_PumpOn();
+    delay(1500);
+    
+    Bending2();
+    delay(600);
+      
+    pump1.PumpOff();
+    pump2.PumpOff();
+    pump3.PumpOff();
+    delay(1000);
+      
+      
+      
+    Bending1();
+    delay(200);
+
+
+    sv2.attach(sv2.pin);
+    sv2.Contraction(unit_angle);
+    delay(150);
+    sv2.detach();
+
+    sv3.attach(sv3.pin);
+    sv3.Contraction(unit_angle);
+    delay(150);
+    sv3.detach();
+
+    Leg_PumpOn();
+
+    delay(1000);
 
 }
 void Robot::TurnRight(){ /* TODO */ }
