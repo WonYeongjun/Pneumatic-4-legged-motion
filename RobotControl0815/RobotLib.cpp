@@ -178,6 +178,7 @@ void Leg::Initialize() {
   pump1.Initialize();
   pump2.Initialize();
   pump3.Initialize();
+  joy.Initialize();
 }
 
 void Leg::Bending12() {
@@ -410,20 +411,26 @@ void Leg::Standing() {
   Leg_PumpOff();
 }
 void Leg::Leg_joystick_control() {
-  if (joy.pos==0 and joy.button_attached==1){
-    Extension();
-  }
-  else if (joy.pos==1 and joy.button_attached==1){
-    Contraction();
-  }
+  // if (joy.pos==0 and joy.button_attached==1){
+  //   Extension();
+  // }
+  // else if (joy.pos==1 and joy.button_attached==1){
+  //   Contraction();
+  // }
   joy.get_input();
-  joy.cal_angle();
-  joy.cal_length();
-  angle_to_rel_state();
+  Serial.print("BUtton ");
+  Serial.println(joy.button_attached);
+  Serial.print(joy.newx);
+  Serial.print(", ");
+  Serial.println(joy.newy);
+  Serial.println(analogRead(joy.X));
+  // joy.cal_angle();
+  // joy.cal_length();
+  // angle_to_rel_state();
 
-  pump1.speed=(int)state[0];
-  pump2.speed=(int)state[1];
-  pump3.speed=(int)state[2];
+  // pump1.speed=(int)state[0];
+  // pump2.speed=(int)state[1];
+  // pump3.speed=(int)state[2];
 }
 
 void Leg::angle_to_rel_state() {
