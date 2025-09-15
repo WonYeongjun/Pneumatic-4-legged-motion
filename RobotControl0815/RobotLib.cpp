@@ -468,11 +468,11 @@ void Leg::angle_to_rel_state() {
   Serial.println(" ");
 }
 // -------- Robot --------
-Robot::Robot(const int S_PIN[9], const int P_PIN[9], const int speedarray[9])
-    : A(S_PIN[0], S_PIN[1], S_PIN[2], P_PIN[0], P_PIN[1], P_PIN[2], speedarray[0],speedarray[1],speedarray[2]),
-      B(S_PIN[3], S_PIN[4], S_PIN[5], P_PIN[3], P_PIN[4], P_PIN[5],speedarray[3],speedarray[4],speedarray[5]),
-      C(S_PIN[6], S_PIN[7], S_PIN[8], P_PIN[6], P_PIN[7], P_PIN[8],speedarray[6],speedarray[7],speedarray[8]),
-      D(S_PIN[9], S_PIN[10], S_PIN[11], P_PIN[9], P_PIN[10], P_PIN[11],speedarray[9],speedarray[10],speedarray[11]) {}
+Robot::Robot(const int S_PIN[9], const int P_PIN[9], const int speedarray[9], const int joystickarray[12])
+    : A(S_PIN[0], S_PIN[1], S_PIN[2], P_PIN[0], P_PIN[1], P_PIN[2], speedarray[0],speedarray[1],speedarray[2], joystickarray[0], joystickarray[1], joystickarray[2]),
+      B(S_PIN[3], S_PIN[4], S_PIN[5], P_PIN[3], P_PIN[4], P_PIN[5],speedarray[3],speedarray[4],speedarray[5], joystickarray[3], joystickarray[4], joystickarray[5]),
+      C(S_PIN[6], S_PIN[7], S_PIN[8], P_PIN[6], P_PIN[7], P_PIN[8],speedarray[6],speedarray[7],speedarray[8], joystickarray[6], joystickarray[7], joystickarray[8]),
+      D(S_PIN[9], S_PIN[10], S_PIN[11], P_PIN[9], P_PIN[10], P_PIN[11],speedarray[9],speedarray[10],speedarray[11], joystickarray[9], joystickarray[10], joystickarray[11]) {}
 
       
 

@@ -90,7 +90,7 @@ public:
   Leg A, B, C, D;
   int unit_angle=10;
 
-  Robot(const int S_PIN[12], const int P_PIN[12], const int speedarray[12]);
+  Robot(const int S_PIN[12], const int P_PIN[12], const int speedarray[12], const int joystickarray[12]);
   void Initialize();
     
   void AB_Forward();
