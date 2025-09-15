@@ -412,20 +412,20 @@ void Leg::Standing() {
 void Leg::Leg_joystick_control() {
   if (joy.pos==0 and joy.button_attached==1){
     Extension();
-    Leg_PumpOff();
   }
   else if (joy.pos==1 and joy.button_attached==1){
-    
+    Contraction();
   }
   joy.get_input();
   joy.cal_angle();
   joy.cal_length();
-  // joy.angle_to_rel_state();
+  angle_to_rel_state();
 
-  pump1.Intensity((int)state[0]);
-  pump2.Intensity((int)state[1]);
-  pump3.Intensity((int)state[2]);
+  pump1.speed=(int)state[0];
+  pump2.speed=(int)state[1];
+  pump3.speed=(int)state[2];
 }
+
 void Leg::angle_to_rel_state() {
   float rel_angle, low, high, low_tmp, high_tmp;
 
