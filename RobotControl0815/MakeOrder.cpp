@@ -300,11 +300,14 @@ void MakeOrder(Robot& robot) {
             }
             String jm = Input();
             if (HandleKill(jm, robot)) { showJoyMenu = true; continue; } // ★
-            if (jm.length() == 0) {J-> ; continue; }
+            if (jm.length() == 0) {J->Leg_joystick_control() ; continue; }
             if (jm == "0") break;
+            else {Serial.println(F("Invalid")); showJoyMenu = true; continue;}
           }
+          showJoyMenu = true;
         }
-      }
+        showJoy = true; // end Joy
+      } break;
 
       default:
         Serial.println(F("Invalid"));
