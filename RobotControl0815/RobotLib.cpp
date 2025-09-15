@@ -8,11 +8,18 @@ void Joy::Initialize() {
   pinMode(X, INPUT);
   pinMode(Y, INPUT);
   pinMode(joy, INPUT);
-  pos = digitalRead(joy);
+  pos = 0; //0: extension, 1: contraction
 }
 void Joy::get_input() {
   newx = analogRead(X);
   newy = analogRead(Y);
+  if (digitalRead(joy) == HIGH and button_attached==0) {
+    pos = 1 - pos;
+    button_attached=1;
+  }
+  if (button_attached==1 and digitalRead(joy) == LOW){
+    button_attached=0;
+  }
 }
 
 void Joy::cal_angle() {
@@ -20,6 +27,9 @@ void Joy::cal_angle() {
   int dy = newy - ctry;
 
   angle = atan2(dy, dx);
+  if (pos==1){
+    angle-=M_PI;
+  }
   if (angle<0){
     angle = angle + 2*M_PI;
   }
@@ -34,47 +44,7 @@ void Joy::cal_length() {
   length= leng/(512*sqrt(2));
   length*=255;
 }
-/*void Joy::angle_to_rel_state() {
-  float rel_angle, low, high, low_tmp, high_tmp;
 
-  if (30 <= angle && angle < 150) { // A : 1 , 2
-    rel_angle = (angle - 30) * M_PI / 180.0;
-    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
-    high_tmp = 2 * sin(rel_angle) / sqrt(3);
-    low = low_tmp / (low_tmp + high_tmp);
-    high = high_tmp / (low_tmp + high_tmp);
-    state[0] = 0;
-    state[1] = low * length *(255-minspeed)/255 + minspeed;
-    state[2] = high* length *(255-minspeed)/255 + minspeed;
-  } 
-  else if (150 <= angle && angle < 270) { // B : 2 , 0
-    rel_angle = (angle - 150) * M_PI / 180.0;
-    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
-    high_tmp = 2 * sin(rel_angle) / sqrt(3);
-    low = low_tmp / (low_tmp + high_tmp);
-    high = high_tmp / (low_tmp + high_tmp);
-    state[1] = 0;
-    state[2] = low * length *(255-minspeed)/255 + minspeed;
-    state[0] = high* length *(255-minspeed)/255 + minspeed;
-  } 
-  else { // C : 0 , 1
-    rel_angle = (angle - 270) * M_PI / 180.0;
-    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
-    high_tmp = 2 * sin(rel_angle) / sqrt(3);
-    low = low_tmp / (low_tmp + high_tmp);
-    high = high_tmp / (low_tmp + high_tmp);
-    state[2] = 0;
-    state[0] = low * length *(255-minspeed)/255 + minspeed;
-    state[1] = high* length *(255-minspeed)/255 + minspeed;
-    }
-  Serial.print("state : ");
-  Serial.print((int)state[0]);
-  Serial.print(", ");
-  Serial.print((int)state[1]);
-  Serial.print(", ");
-  Serial.println((int)state[2]);
-  Serial.println(" ");
-}*/
 // -------- Pump --------
 Pump::Pump(int pin_, int speed_) : pin(pin_), speed(speed_), tmp(0) {}
 
@@ -438,11 +408,65 @@ void Leg::Standing() {
   Leg_PumpOn();
   delay(1000);
   Leg_PumpOff();
-  
-
-
 }
+void Leg::Leg_joystick_control() {
+  if (joy.pos==0 and joy.button_attached==1){
+    Extension();
+    Leg_PumpOff();
+  }
+  else if (joy.pos==1 and joy.button_attached==1){
+    
+  }
+  joy.get_input();
+  joy.cal_angle();
+  joy.cal_length();
+  // joy.angle_to_rel_state();
 
+  pump1.Intensity((int)state[0]);
+  pump2.Intensity((int)state[1]);
+  pump3.Intensity((int)state[2]);
+}
+void Leg::angle_to_rel_state() {
+  float rel_angle, low, high, low_tmp, high_tmp;
+
+  if (30 <= joy.angle && joy.angle < 150) { // A : 1 , 2
+    rel_angle = (joy.angle - 30) * M_PI / 180.0;
+    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
+    high_tmp = 2 * sin(rel_angle) / sqrt(3);
+    low = low_tmp / (low_tmp + high_tmp);
+    high = high_tmp / (low_tmp + high_tmp);
+    state[0] = 0;
+    state[1] = low * joy.length *(pump2.speed-minspeed)/pump2.speed + minspeed;
+    state[2] = high* joy.length *(pump3.speed-minspeed)/pump3.speed + minspeed;
+  } 
+  else if (150 <= joy.angle && joy.angle < 270) { // B : 2 , 0
+    rel_angle = (joy.angle - 150) * M_PI / 180.0;
+    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
+    high_tmp = 2 * sin(rel_angle) / sqrt(3);
+    low = low_tmp / (low_tmp + high_tmp);
+    high = high_tmp / (low_tmp + high_tmp);
+    state[1] = 0;
+    state[2] = low * joy.length *(pump3.speed-minspeed)/pump3.speed + minspeed;
+    state[0] = high* joy.length *(pump1.speed-minspeed)/pump1.speed + minspeed;
+  } 
+  else { // C : 0 , 1
+    rel_angle = (joy.angle - 270) * M_PI / 180.0;
+    low_tmp = cos(rel_angle) + sin(rel_angle) / sqrt(3);
+    high_tmp = 2 * sin(rel_angle) / sqrt(3);
+    low = low_tmp / (low_tmp + high_tmp);
+    high = high_tmp / (low_tmp + high_tmp);
+    state[2] = 0;
+    state[0] = low * joy.length *(pump1.speed-minspeed)/pump1.speed + minspeed;
+    state[1] = high* joy.length *(pump2.speed-minspeed)/pump2.speed + minspeed;
+    }
+  Serial.print("state : ");
+  Serial.print((int)state[0]);
+  Serial.print(", ");
+  Serial.print((int)state[1]);
+  Serial.print(", ");
+  Serial.println((int)state[2]);
+  Serial.println(" ");
+}
 // -------- Robot --------
 Robot::Robot(const int S_PIN[9], const int P_PIN[9], const int speedarray[9])
     : A(S_PIN[0], S_PIN[1], S_PIN[2], P_PIN[0], P_PIN[1], P_PIN[2], speedarray[0],speedarray[1],speedarray[2]),

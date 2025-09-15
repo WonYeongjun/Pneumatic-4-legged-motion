@@ -13,13 +13,14 @@ public:
   int ctrx;
   int ctry;
   int pos;
+  int button_attached=0;
 
   int stop_sign=0;
   long newx;
   long newy;
   float angle;
   long length;
-  float state[3];
+
   explicit Joy(int X_, int Y_, int joy_,int ctrx=519, int ctry=494);
   void Initialize();
   void get_input();
@@ -59,6 +60,8 @@ public:
   Pump pump1, pump2, pump3;
   Joy joy;
   int unit_angle = 10;
+  int minspeed = 70;
+  float state[3]={255,255,255};
 
   Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int speed2, int speed3, int X_=1, int Y_=2, int joy_=3, int ctrx_=519, int ctry_=494);
   void Leg_PumpOn();
@@ -66,10 +69,12 @@ public:
   void Initialize();
   void Leg_simultaneous_contraction();
   void Leg_simultaneous_extention();
-
+  void Leg_joystick_control();
+  void angle_to_rel_state();
   void Bending12();
   void Bending23();
   void Bending31();
+  
 
   void Extension();
   void Contraction();
