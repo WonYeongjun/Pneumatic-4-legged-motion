@@ -53,6 +53,7 @@ void MakeOrder(Robot& robot) {
       Serial.println(F("=== ROOT ==="));
       Serial.println(F("1. Robot Movement"));
       Serial.println(F("2. Leg"));
+      Serial.println(F("3. Joy"));
       Serial.println(F("0. Exit"));
       showRoot = false;
     }
@@ -268,6 +269,42 @@ void MakeOrder(Robot& robot) {
           showLegSel = true;
         }   // end Leg select
       } break;
+
+      // Joystick
+      case 3: {
+        bool showJoy = true;
+        while (true) {
+          if (showJoy) {
+            Serial.println(F("Joystick mode"));
+            Serial.println(F("Select Leg : 1.A 2.B 3.C 4.D  /  0.Back"));
+            showJoy = false;
+          }
+          String jy = Input();
+          if (HandleKill(jy, robot)) { showJoy = true; continue; } // ★
+          if (jy.length() == 0) { delay(1); continue; }
+          if (jy == "0") break;
+
+          int joySel = jy.toInt();
+          Leg* J = nullptr;
+          if      (joySel == 1) J = &robot.A;
+          else if (joySel == 2) J = &robot.B;
+          else if (joySel == 3) J = &robot.C;
+          else if (joySel == 4) J = &robot.D;
+          else { Serial.println(F("Invalid")); showJoy = true; continue; }
+
+          bool showJoyMenu = true;
+          while (true) {
+            if (showJoyMenu) {
+              Serial.println(F("Control by Joystick. Press 0 to return."));
+              showJoyMenu = false;
+            }
+            String jm = Input();
+            if (HandleKill(jm, robot)) { showJoyMenu = true; continue; } // ★
+            if (jm.length() == 0) {J-> ; continue; }
+            if (jm == "0") break;
+          }
+        }
+      }
 
       default:
         Serial.println(F("Invalid"));
