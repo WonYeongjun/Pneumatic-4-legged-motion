@@ -555,6 +555,20 @@ void Robot::AB_Forward() {
   B.pump3.speed = 130;
   B.Standing();
 
+  // A.Leg_simultaneous_extention();
+  // B.Leg_simultaneous_extention();
+  // C.Leg_simultaneous_extention();
+  // D.Leg_simultaneous_extention();
+
+  // B.Leg_PumpOn();
+  // C.Leg_PumpOn();
+  // D.Leg_PumpOn();
+  // delay(1000);
+
+  // B.Leg_PumpOff();
+  // C.Leg_PumpOff();
+  // D.Leg_PumpOff();
+
   A.Extension();
   delay(800);
   
@@ -586,6 +600,9 @@ void Robot::AB_Forward() {
   B.Leg_PumpOff();
 
   A.Contraction();
+  // delay(1500);
+  // A.Extension();
+  // delay(1000);
 
   B.pump1.speed = B_temp[0];
   B.pump2.speed = B_temp[1];
