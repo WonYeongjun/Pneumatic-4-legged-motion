@@ -7,17 +7,21 @@ Joy::Joy(int X_, int Y_, int joy_, int ctrx_, int ctry_) : X(X_), Y(Y_), joy(joy
 void Joy::Initialize() {
   pinMode(X, INPUT);
   pinMode(Y, INPUT);
-  pinMode(joy, INPUT);
+  pinMode(joy, INPUT_PULLUP);
   pos = 0; //0: extension, 1: contraction
 }
 void Joy::get_input() {
   newx = analogRead(X);
   newy = analogRead(Y);
-  if (digitalRead(joy) == HIGH and button_attached==0) {
+  button_state=digitalRead(joy);
+  Serial.println(button_state);
+  if (button_state == 0 and button_attached==0) {
     pos = 1 - pos;
     button_attached=1;
+    Serial.println("button_attached");
   }
-  if (button_attached==1 and digitalRead(joy) == LOW){
+  if (button_attached==1 and button_state == 1){
+    Serial.println("button_released");
     button_attached=0;
   }
 }
@@ -420,7 +424,11 @@ void Leg::Leg_joystick_control() {
   }
   joy.get_input();
   Serial.print("Button ");
-  Serial.println(joy.button_attached);
+  Serial.print(joy.button_state);
+  Serial.print(" Attached?");
+  Serial.print(joy.button_attached);
+  Serial.print(" pos");
+  Serial.println(joy.pos);
   Serial.print(joy.newx);
   Serial.print(", ");
   Serial.println(joy.newy);
@@ -432,14 +440,9 @@ void Leg::Leg_joystick_control() {
   Serial.println(joy.length);
   angle_to_rel_state();
 
-  Serial.print("pump2.speed: ");
-  Serial.println(pump2.speed);
   pump1.Intensity((int)state[0]);
   pump2.Intensity((int)state[1]);
   pump3.Intensity((int)state[2]);
-  // Serial.print("pump2.speed: ");
-  // Serial.println(pump2.speed);
-
 }
 
 void Leg::angle_to_rel_state() {

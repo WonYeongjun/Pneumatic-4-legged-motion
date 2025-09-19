@@ -24,13 +24,13 @@ int S_pin[12] = {s1[0], s1[1], s1[2], s2[0], s2[1], s2[2], s3[0], s3[1], s3[2], 
 int P_pin[12] = {p1[0], p1[1], p1[2], p2[0], p2[1], p2[2], p3[0], p3[1], p3[2], p4[0], p4[1], p4[2]};
 int speedarray[12] = {speed_1[0], speed_1[1], speed_1[2], speed_2[0], speed_2[1], speed_2[2], speed_3[0], speed_3[1], speed_3[2], speed_4[0], speed_4[1],speed_4[2]};
 
-int joystickarray[12] = {A13, A12, 43};
+int joystickarray[12] = {NULL,NULL,NULL,A13, A12, 43};
 
 int x=495;
 int y=520;
 
 
-Leg l1(s1[0], s1[1], s1[2], p1[0], p1[1], p1[2], A12, A13, 43); // Robot 정의 시 필요없음.
+// Leg l1(s1[0], s1[1], s1[2], p1[0], p1[1], p1[2], A12, A13, 43); // Robot 정의 시 필요없음.
 // // Leg l2(s2[0], s2[1], s2[2], p2[0], p2[1], p2[2]);
 // // Leg l3(s3[0], s3[1], s3[2], p3[0], p3[1], p3[2]);
 // // Leg l4(s4[0], s4[1], s4[2], p4[0], p4[1], p4[2]);

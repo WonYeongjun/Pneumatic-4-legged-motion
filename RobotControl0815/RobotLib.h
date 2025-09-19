@@ -14,6 +14,7 @@ public:
   int ctry;
   int pos;
   int button_attached=0;
+  int button_state;
 
   int stop_sign=0;
   long newx;
