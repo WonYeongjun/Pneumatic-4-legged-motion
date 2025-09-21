@@ -300,7 +300,22 @@ void MakeOrder(Robot& robot) {
             }
             String jm = Input();
             if (HandleKill(jm, robot)) { showJoyMenu = true; continue; } // ★
-            if (jm.length() == 0) {J->Leg_joystick_control() ; continue; }
+            if (jm.length() == 0) {
+              while (true){
+                char jmc='1';
+                if (Serial.available() > 0) { // 시리얼 버퍼에 데이터가 있는지 확인
+                  jmc = Serial.read();
+                  Serial.println(jmc);
+                }
+                if (jmc=='0') {break;}
+                J->Leg_joystick_control();
+              }
+              Serial.println("0 on");
+              showJoyMenu = true;
+              showJoy = true;
+              J->Leg_PumpOff();
+              break ;
+            }
             if (jm == "0") break;
             else {Serial.println(F("Invalid")); showJoyMenu = true; continue;}
           }
