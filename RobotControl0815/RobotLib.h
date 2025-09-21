@@ -22,7 +22,7 @@ public:
   float angle;
   long length;
 
-  explicit Joy(int X_, int Y_, int joy_,int ctrx=519, int ctry=494);
+  explicit Joy(int X_, int Y_, int joy_,int ctrx=512, int ctry=516);
   void Initialize();
   void get_input();
   void cal_angle();
@@ -64,7 +64,7 @@ public:
   int minspeed = 70;
   float state[3]={255,255,255};
 
-  Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int speed2, int speed3, int X_=1, int Y_=2, int joy_=3, int ctrx_=519, int ctry_=494);
+  Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int speed2, int speed3, int X_=1, int Y_=2, int joy_=3, int ctrx_=512, int ctry_=516);
   void Leg_PumpOn();
   void Leg_PumpOff();
   void Initialize();

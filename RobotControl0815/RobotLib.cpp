@@ -417,10 +417,10 @@ void Leg::Standing() {
 }
 void Leg::Leg_joystick_control() {
   if (joy.pos==0 and joy.button_attached==1){
-    Extension();
+    Contraction();
   }
   else if (joy.pos==1 and joy.button_attached==1){
-    Contraction();
+    Extension();
   }
   joy.get_input();
   // Serial.print("Button ");
@@ -429,17 +429,23 @@ void Leg::Leg_joystick_control() {
   // Serial.print(joy.button_attached);
   // Serial.print(" pos");
   // Serial.println(joy.pos);
-  Serial.print(joy.newx-520);
+  Serial.print("position: ");
+  Serial.print(joy.newx-joy.ctrx);
   Serial.print(", ");
-  Serial.println(joy.newy-495);
+  Serial.print(joy.newy-joy.ctry);
   joy.cal_angle();
   joy.cal_length();
-  // Serial.print("Angle : ");
-  // Serial.print(joy.angle);
-  // Serial.print(", Length : ");
-  // Serial.println(joy.length);
+  Serial.print(", Angle : ");
+  Serial.print(joy.angle);
+  Serial.print(", Length : ");
+  Serial.print(joy.length);
   angle_to_rel_state();
-
+  Serial.print(", Velocity : ");
+  Serial.print(state[0]);
+  Serial.print(", ");
+  Serial.print(state[1]);
+  Serial.print(", ");
+  Serial.println(state[2]);
   pump1.Intensity((int)state[0]);
   pump2.Intensity((int)state[1]);
   pump3.Intensity((int)state[2]);

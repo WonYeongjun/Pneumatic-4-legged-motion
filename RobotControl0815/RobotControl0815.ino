@@ -26,8 +26,8 @@ int speedarray[12] = {speed_1[0], speed_1[1], speed_1[2], speed_2[0], speed_2[1]
 
 int joystickarray[12] = {NULL, A10, 47, A12, A11, 48, A13, NULL, 49, NULL, NULL, NULL};
 
-int x=520;
-int y=495;
+int x=513;
+int y=517;
 
 
 // Leg l1(s1[0], s1[1], s1[2], p1[0], p1[1], p1[2], A12, A13, 43); // Robot 정의 시 필요없음.
