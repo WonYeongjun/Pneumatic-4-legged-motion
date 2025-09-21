@@ -546,7 +546,7 @@ void Robot::Standing() {
   B.Leg_PumpOn();
   C.Leg_PumpOn();
   D.Leg_PumpOn();
-  delay(5000);
+  delay(500);
   A.Leg_PumpOff();
   B.Leg_PumpOff();
   C.Leg_PumpOff();
@@ -686,6 +686,22 @@ void Robot::Backward() {
   A.Leg_PumpOn();
   A.pump1.PumpOff();
   delay(1000);
+
+}
+void Robot::standWithABClegs() {
+  A.Bending12();
+  A.Leg_PumpOff();
+  B.Bending23();
+  B.Leg_PumpOff();
+  C.Bending31();
+  C.Leg_PumpOff();
+  A.Leg_PumpOn();
+  B.Leg_PumpOn();
+  C.Leg_PumpOn();
+  delay(500);
+  A.Leg_PumpOff();
+  B.Leg_PumpOff();
+  C.Leg_PumpOff();
 
 }
 void Robot::TurnRight(){ /* TODO */ }

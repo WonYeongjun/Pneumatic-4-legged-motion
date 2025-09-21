@@ -84,6 +84,7 @@ void MakeOrder(Robot& robot) {
             case 3: robot.TurnLeft();  break;
             case 4: robot.TurnRight(); break;
             case 5: robot.Standing(); break;
+            case 6: robot.standWithABClegs(); break;
             default: Serial.println(F("Invalid")); break;
           }
           showRM = true;
