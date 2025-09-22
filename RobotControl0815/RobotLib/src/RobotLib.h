@@ -37,11 +37,16 @@ public:
 
   Leg(int s_pin1, int s_pin2, int s_pin3, int p_pin1, int p_pin2, int p_pin3, int speed1, int spped2, int speed3);
   void Leg_PumpOn();
+    void Leg_PumpOff();
   void Initialize();
 
   void Bending12();
   void Bending23();
   void Bending31();
+    
+  void Bending1();
+  void Bending2();
+  void Bending3();
 
   void Extension();
   void Contraction();
@@ -49,15 +54,21 @@ public:
 
   void Forward();
   void Backward();
+    
+    void Standing();
+    
+    
+
 };
 
 class Robot {
 public:
-  Leg FL, FR, RL, RR;
-  int tmp;
+  Leg A, B, C, D;
 
   Robot(const int S_PIN[12], const int P_PIN[12], const int speedarray[12]);
   void Initialize();
+    
+  void AB_Forward();
 
   void FL_RR_Forward();
   void FR_RL_Forward();
@@ -66,4 +77,5 @@ public:
   void Backward();
   void TurnRight();
   void TurnLeft();
+  void Standing();
 };
