@@ -53,7 +53,6 @@ void MakeOrder(Robot& robot) {
       Serial.println(F("=== ROOT ==="));
       Serial.println(F("1. Robot Movement"));
       Serial.println(F("2. Leg"));
-      Serial.println(F("3. Joy"));
       Serial.println(F("0. Exit"));
       showRoot = false;
     }
@@ -70,7 +69,7 @@ void MakeOrder(Robot& robot) {
         bool showRM = true;
         while (true) {
           if (showRM) {
-            Serial.println(F("Robot Movement : 1.AB_Forward  2.Backward  3.TurnLeft  4.TurnRight 5.Standing 0.Back"));
+            Serial.println(F("Robot Movement : 1.AB_Forward  2.Backward  3.TurnLeft  4.TurnRight 5.Standing /  0.Back"));
             showRM = false;
           }
           String rs = Input();
@@ -84,7 +83,6 @@ void MakeOrder(Robot& robot) {
             case 3: robot.TurnLeft();  break;
             case 4: robot.TurnRight(); break;
             case 5: robot.Standing(); break;
-            case 6: robot.standWithABClegs(); break;
             default: Serial.println(F("Invalid")); break;
           }
           showRM = true;
@@ -96,7 +94,7 @@ void MakeOrder(Robot& robot) {
         bool showLegSel = true;
         while (true) {
           if (showLegSel) {
-            Serial.println(F("Select Leg : 1.A 2.B 3.C 4.D  /  0.Back"));
+            Serial.println(F("Select Leg : 1.A 2.B 3.C 4.D /  0.Back"));
             showLegSel = false;
           }
           String ls = Input();
@@ -130,7 +128,7 @@ void MakeOrder(Robot& robot) {
               bool showLM = true;
               while (true) {
                 if (showLM) {
-                  Serial.println(F("Leg Movement : 1.Forward  2.Backward  3.Bending  4.Extension  5.Contraction 6.kill_pump /  0.Back"));
+                  Serial.println(F("Leg Movement : 1.Forward  2.Backward  3.Bending  4.Extension  5.Contraction  /  0.Back"));
                   showLM = false;
                 }
                 String mms = Input();
@@ -145,7 +143,7 @@ void MakeOrder(Robot& robot) {
                   bool showB = true;
                   while (true) {
                     if (showB) {
-                      Serial.println(F("Bending : 1.Bending12  2.Bending23  3.Bending31  /  0.Back"));
+                      Serial.println(F("Bending : 1.Bending12  2.Bending23  3.Bending31  4.Bending1  5.Bending2  6.Bending3  /  0.Back"));
                       showB = false;
                     }
                     String bs = Input();
@@ -156,13 +154,17 @@ void MakeOrder(Robot& robot) {
                     if      (b == 1) L->Bending12();
                     else if (b == 2) L->Bending23();
                     else if (b == 3) L->Bending31();
+                    else if (b == 4) L->Bending1();
+                    else if (b == 5) L->Bending2();
+                    else if (b == 6) L->Bending3();
+                    
+                      
                     else             Serial.println(F("Invalid"));
                     showB = true;
                   }
                 }
                 else if (mm == 4) { L->Extension(); }
                 else if (mm == 5) { L->Contraction(); }
-                else if (mm == 6) {L->Leg_PumpOff();}
                 else              { Serial.println(F("Invalid")); }
 
                 showLM = true;
@@ -217,7 +219,7 @@ void MakeOrder(Robot& robot) {
               bool showServoSel = true;
               while (true) {
                 if (showServoSel) {
-                  Serial.println(F("Servo : 1.Servo1  2.Servo2  3.Servo3 4.Leg_simultaneous_extention 5.Leg_simultaneous_contraction /  0.Back"));
+                  Serial.println(F("Servo : 1.Servo1  2.Servo2  3.Servo3  /  0.Back"));
                   showServoSel = false;
                 }
                 String sss = Input();
@@ -230,10 +232,6 @@ void MakeOrder(Robot& robot) {
                 if      (ss == 1) S = &L->sv1;
                 else if (ss == 2) S = &L->sv2;
                 else if (ss == 3) S = &L->sv3;
-                // else if (ss == 4) {L->Leg_simultaneous_extention();
-                // continue;}
-                // else if (ss == 5) {L->Leg_simultaneous_contraction();
-                // continue;}
                 else { Serial.println(F("Invalid")); showServoSel = true; continue; }
 
                 bool showServoAct = true;
@@ -269,60 +267,6 @@ void MakeOrder(Robot& robot) {
           } // end Leg menu
           showLegSel = true;
         }   // end Leg select
-      } break;
-
-      // Joystick
-      case 3: {
-        bool showJoy = true;
-        while (true) {
-          if (showJoy) {
-            Serial.println(F("Joystick mode"));
-            Serial.println(F("Select Leg : 1.A 2.B 3.C 4.D  /  0.Back"));
-            showJoy = false;
-          }
-          String jy = Input();
-          if (HandleKill(jy, robot)) { showJoy = true; continue; } // ★
-          if (jy.length() == 0) { delay(1); continue; }
-          if (jy == "0") break;
-
-          int joySel = jy.toInt();
-          Leg* J = nullptr;
-          if      (joySel == 1) J = &robot.A;
-          else if (joySel == 2) J = &robot.B;
-          else if (joySel == 3) J = &robot.C;
-          else if (joySel == 4) J = &robot.D;
-          else { Serial.println(F("Invalid")); showJoy = true; continue; }
-
-          bool showJoyMenu = true;
-          while (true) {
-            if (showJoyMenu) {
-              Serial.println(F("Control by Joystick. Press 0 to return."));
-              showJoyMenu = false;
-            }
-            String jm = Input();
-            if (HandleKill(jm, robot)) { showJoyMenu = true; continue; } // ★
-            if (jm.length() == 0) {
-              while (true){
-                char jmc='1';
-                if (Serial.available() > 0) { // 시리얼 버퍼에 데이터가 있는지 확인
-                  jmc = Serial.read();
-                  Serial.println(jmc);
-                }
-                if (jmc=='0') {break;}
-                J->Leg_joystick_control();
-              }
-              Serial.println("0 on");
-              showJoyMenu = true;
-              showJoy = true;
-              J->Leg_PumpOff();
-              break ;
-            }
-            if (jm == "0") break;
-            else {Serial.println(F("Invalid")); showJoyMenu = true; continue;}
-          }
-          showJoyMenu = true;
-        }
-        showJoy = true; // end Joy
       } break;
 
       default:
